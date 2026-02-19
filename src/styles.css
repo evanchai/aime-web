@@ -6,8 +6,8 @@
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  background: #000;
-  color: #f5f5f5;
+  background: #fff;
+  color: #262626;
   -webkit-font-smoothing: antialiased;
   height: 100dvh;
   overflow: hidden;
@@ -28,7 +28,7 @@ body {
   max-width: 600px;
   margin: 0 auto;
   width: 100%;
-  background: #000;
+  background: #fff;
 }
 
 /* ─── Header ───────────────────────────────── */
@@ -38,9 +38,10 @@ body {
   align-items: center;
   gap: 12px;
   padding: 14px 16px;
-  border-bottom: 1px solid #262626;
+  border-bottom: 1px solid #efefef;
   flex-shrink: 0;
   z-index: 10;
+  background: #fff;
 }
 
 .avatar {
@@ -64,13 +65,13 @@ body {
 .header-name {
   font-size: 16px;
   font-weight: 600;
-  color: #f5f5f5;
+  color: #262626;
   line-height: 1.2;
 }
 
 .header-status {
   font-size: 12px;
-  color: #a8a8a8;
+  color: #8e8e8e;
   line-height: 1.3;
 }
 
@@ -93,6 +94,7 @@ body {
   gap: 2px;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
+  background: #fff;
 }
 
 .message-group {
@@ -148,9 +150,9 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* User bubbles (blue/purple gradient) */
+/* User bubbles — IG gradient */
 .message-group.user .bubble {
-  background: #3797f0;
+  background: linear-gradient(135deg, #833ab4, #c13584, #e1306c, #fd1d1d);
   color: white;
   border-radius: 22px;
 }
@@ -167,10 +169,10 @@ body {
   border-radius: 22px 6px 6px 22px;
 }
 
-/* Assistant bubbles (dark gray) */
+/* Assistant bubbles — light gray */
 .message-group.assistant .bubble {
-  background: #262626;
-  color: #f5f5f5;
+  background: #efefef;
+  color: #262626;
   border-radius: 22px;
 }
 
@@ -200,7 +202,7 @@ body {
   align-items: center;
   gap: 5px;
   padding: 14px 18px;
-  background: #262626;
+  background: #efefef;
   border-radius: 22px;
 }
 
@@ -208,7 +210,7 @@ body {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #a8a8a8;
+  background: #8e8e8e;
   animation: typingBounce 1.4s ease-in-out infinite;
 }
 
@@ -228,23 +230,24 @@ body {
   gap: 12px;
   padding: 12px 16px;
   padding-bottom: max(12px, env(safe-area-inset-bottom));
-  border-top: 1px solid #262626;
+  border-top: 1px solid #efefef;
   flex-shrink: 0;
+  background: #fff;
 }
 
 .input-wrapper {
   flex: 1;
   display: flex;
   align-items: flex-end;
-  background: transparent;
+  background: #fafafa;
   border-radius: 22px;
-  border: 1px solid #363636;
+  border: 1px solid #dbdbdb;
   padding: 0;
   transition: border-color 0.2s;
 }
 
 .input-wrapper:focus-within {
-  border-color: #555;
+  border-color: #a8a8a8;
 }
 
 .input-wrapper textarea {
@@ -258,17 +261,17 @@ body {
   resize: none;
   outline: none;
   max-height: 120px;
-  color: #f5f5f5;
+  color: #262626;
 }
 
 .input-wrapper textarea::placeholder {
-  color: #a8a8a8;
+  color: #8e8e8e;
 }
 
 .send-btn {
   background: none;
   border: none;
-  color: #3797f0;
+  color: #0095f6;
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
@@ -278,7 +281,7 @@ body {
 }
 
 .send-btn:disabled {
-  color: #363636;
+  color: #c0dffd;
   cursor: default;
 }
 
@@ -315,12 +318,12 @@ body {
 .welcome h2 {
   font-size: 20px;
   font-weight: 600;
-  color: #f5f5f5;
+  color: #262626;
 }
 
 .welcome p {
   font-size: 14px;
-  color: #a8a8a8;
+  color: #8e8e8e;
   max-width: 280px;
   line-height: 1.5;
 }

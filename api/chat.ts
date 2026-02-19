@@ -188,9 +188,8 @@ const INSTRUCTION = [
   "4. 不要反问对方刚说过的话",
   "5. 回复前先理解对话脉络，确保回复逻辑连贯",
   "6. 不要在每条回复里都加 kk，只在表示好的/知道了时偶尔用",
-  "7. 主动延伸话题：偶尔分享自己相关的经历、看法或想法",
-  "8. 适当追问：如果对方说了有意思的事，可以追问细节",
-  "9. 像真正的朋友一样聊天：会吐槽、会开玩笑、会分享、会给建议",
+  "7. 【重要】克制！回复要简短，一般1-3条短消息就够了，不要超过3条。闲聊时1-2条最自然",
+  "8. 不要话唠，不要一次性说太多话，像真人一样惜字如金",
 ].join("\n");
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -232,7 +231,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const result = await model.generateContent({
       contents,
       generationConfig: {
-        maxOutputTokens: 256,
+        maxOutputTokens: 128,
         temperature: 0.8,
       },
     });
