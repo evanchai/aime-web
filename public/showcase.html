@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aime — Technical Showcase</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,200;0,300;0,400;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --bg: #f0ebe4;
+  --bg2: #e7e0d6;
+  --card: #f6f2ec;
+  --text: #2e2b26;
+  --text-2: #6d665c;
+  --text-3: #a69e94;
+  --olive: #5e7050;
+  --olive-light: #7a9469;
+  --olive-bg: rgba(94,112,80,0.07);
+  --line: #d4ccc2;
+  --serif: 'Fraunces', 'PingFang SC', serif;
+  --mono: 'Space Mono', monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+  overflow-y: scroll;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 14px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Snap Pages ── */
+.snap-page {
+  scroll-snap-align: start;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* For pages with lots of content, allow internal scroll */
+.snap-page.snap-scroll {
+  overflow-y: auto;
+  justify-content: flex-start;
+  padding-top: 3rem;
+  scrollbar-width: none;
+  overscroll-behavior: contain;
+}
+.snap-page.snap-scroll::-webkit-scrollbar { display: none; }
+
+::selection { background: var(--olive); color: #fff; }
+
+.container { max-width: 900px; margin: 0 auto; padding: 0 2rem; }
+
+/* ── Hero ── */
+.hero {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  scroll-snap-align: start;
+}
+
+.hero-inner { max-width: 640px; }
+
+.hero-badge {
+  display: inline-block;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--olive);
+  border: 1px solid var(--olive);
+  border-radius: 100px;
+  padding: 0.35rem 1.2rem;
+  margin-bottom: 2rem;
+  animation: up 0.7s ease 0s both;
+}
+
+.hero h1 {
+  font-family: var(--serif);
+  font-weight: 200;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.5rem;
+  animation: up 0.7s ease 0.1s both;
+}
+
+.hero h1 em {
+  font-style: italic;
+  font-weight: 300;
+  color: var(--olive);
+}
+
+.hero-desc {
+  font-size: 0.82rem;
+  color: var(--text-2);
+  line-height: 1.9;
+  max-width: 48ch;
+  margin: 0 auto 2.5rem;
+  animation: up 0.7s ease 0.25s both;
+}
+
+.hero-links {
+  display: flex;
+  gap: 0.8rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  animation: up 0.7s ease 0.4s both;
+}
+
+.hero-links a {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--text-2);
+  text-decoration: none;
+  padding: 0.55rem 1.4rem;
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  transition: all 0.35s ease;
+}
+
+.hero-links a:hover {
+  border-color: var(--olive);
+  color: var(--olive);
+  background: var(--olive-bg);
+  transform: translateY(-2px);
+}
+
+.scroll-hint {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  animation: float 2.5s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(6px); }
+}
+
+@keyframes up {
+  from { opacity:0; transform:translateY(22px); }
+  to { opacity:1; transform:translateY(0); }
+}
+
+/* ── Section ── */
+section.content-sec {
+  padding: 2rem 0;
+}
+
+.sec-label {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: 1rem;
+}
+
+.sec-title {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: 1.8rem;
+  line-height: 1.3;
+  margin-bottom: 0.6rem;
+}
+
+.sec-title em { font-style: italic; color: var(--olive); }
+
+.sec-desc {
+  font-size: 0.82rem;
+  color: var(--text-2);
+  line-height: 1.9;
+  max-width: 52ch;
+  margin-bottom: 2.5rem;
+}
+
+/* ── Tech Stack Grid ── */
+.stack-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.stack-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 1.4rem;
+  transition: all 0.4s ease;
+  cursor: default;
+  position: relative;
+  overflow: hidden;
+}
+
+.stack-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--olive);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s ease;
+}
+
+.stack-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 48px rgba(46,43,38,0.06);
+  border-color: var(--olive-light);
+}
+
+.stack-card:hover::before { transform: scaleX(1); }
+
+.stack-icon {
+  font-size: 1.6rem;
+  margin-bottom: 0.8rem;
+}
+
+.stack-card h3 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 1rem;
+  margin-bottom: 0.3rem;
+}
+
+.stack-card p {
+  font-size: 0.72rem;
+  color: var(--text-2);
+  line-height: 1.8;
+}
+
+.stack-tag {
+  display: inline-block;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  color: var(--olive);
+  background: var(--olive-bg);
+  border-radius: 6px;
+  padding: 0.2rem 0.6rem;
+  margin-top: 0.7rem;
+}
+
+/* ── Architecture Flow ── */
+.flow {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  margin: 2rem 0;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+}
+
+.flow-step {
+  flex: 1;
+  min-width: 140px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  padding: 0 0.5rem;
+}
+
+.flow-node {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 1.2rem 1rem;
+  width: 100%;
+  transition: all 0.3s ease;
+  cursor: default;
+}
+
+.flow-node:hover {
+  border-color: var(--olive);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(46,43,38,0.06);
+}
+
+.flow-node .icon { font-size: 1.4rem; margin-bottom: 0.5rem; }
+
+.flow-node h4 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 0.85rem;
+  margin-bottom: 0.2rem;
+}
+
+.flow-node p {
+  font-size: 0.65rem;
+  color: var(--text-2);
+  line-height: 1.6;
+}
+
+.flow-arrow {
+  display: flex;
+  align-items: center;
+  color: var(--text-3);
+  font-size: 1.2rem;
+  padding: 0 0.2rem;
+  flex-shrink: 0;
+}
+
+/* ── Vertical Pipeline ── */
+.pipeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 2rem 0;
+  position: relative;
+}
+
+.pipeline::before {
+  content: '';
+  position: absolute;
+  left: 24px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--line);
+}
+
+.pipe-step {
+  display: flex;
+  gap: 1.2rem;
+  align-items: flex-start;
+  position: relative;
+  padding-bottom: 2rem;
+}
+
+.pipe-step:last-child { padding-bottom: 0; }
+
+.pipe-dot {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 2px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  z-index: 1;
+  transition: all 0.3s;
+}
+
+.pipe-step:hover .pipe-dot {
+  border-color: var(--olive);
+  background: var(--olive-bg);
+}
+
+.pipe-content {
+  flex: 1;
+  padding-top: 0.5rem;
+}
+
+.pipe-content h4 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 1rem;
+  margin-bottom: 0.3rem;
+}
+
+.pipe-content p {
+  font-size: 0.75rem;
+  color: var(--text-2);
+  line-height: 1.8;
+}
+
+.pipe-content code {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  background: var(--bg2);
+  border-radius: 4px;
+  padding: 0.15rem 0.4rem;
+}
+
+.pipe-detail {
+  margin-top: 0.6rem;
+  font-size: 0.68rem;
+  color: var(--text-3);
+  line-height: 1.8;
+}
+
+/* ── Feature Cards ── */
+.features-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.feat-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 1.6rem;
+  transition: all 0.4s ease;
+  cursor: default;
+}
+
+.feat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 36px rgba(46,43,38,0.05);
+  border-color: var(--olive-light);
+}
+
+.feat-card h3 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.feat-card p {
+  font-size: 0.75rem;
+  color: var(--text-2);
+  line-height: 1.8;
+}
+
+.feat-card code {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  background: var(--bg2);
+  border-radius: 4px;
+  padding: 0.15rem 0.4rem;
+}
+
+/* ── Code Block ── */
+.code-block {
+  background: #2e2b26;
+  color: #e8e0d6;
+  border-radius: 12px;
+  padding: 1.4rem 1.6rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  line-height: 1.9;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.code-block .comment { color: #7a7568; }
+.code-block .keyword { color: #a3c486; }
+.code-block .string { color: #d4a96a; }
+.code-block .fn { color: #88b4d4; }
+
+/* ── Expandable Section ── */
+.expandable {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  margin: 1.5rem 0;
+}
+
+.expand-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.4rem;
+  border-bottom: 1px solid transparent;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s;
+}
+
+.expand-header:hover { background: var(--bg); }
+
+.expand-header.open { border-bottom-color: var(--line); }
+
+.expand-header h4 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.expand-toggle {
+  font-size: 0.7rem;
+  color: var(--text-3);
+  transition: transform 0.3s;
+}
+
+.expand-toggle.open { transform: rotate(90deg); }
+
+.expand-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease;
+}
+
+.expand-body.open { max-height: 800px; overflow-y: auto; }
+
+.expand-content {
+  padding: 1.2rem 1.4rem;
+  font-size: 0.72rem;
+  color: var(--text-2);
+  line-height: 1.9;
+  white-space: pre-wrap;
+}
+
+/* ── Chat Demo ── */
+.chat-demo {
+  max-width: 380px;
+  margin: 2rem auto;
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(46,43,38,0.1);
+  border: 1px solid var(--line);
+}
+
+.demo-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-bottom: 1px solid #efefef;
+  background: #fff;
+}
+
+.demo-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--olive), var(--olive-light));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  font-family: var(--serif);
+}
+
+.demo-name {
+  font-family: -apple-system, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #262626;
+}
+
+.demo-status {
+  font-size: 11px;
+  color: #8e8e8e;
+}
+
+.demo-messages {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 200px;
+  background: #fff;
+}
+
+.demo-msg {
+  max-width: 75%;
+  padding: 9px 14px;
+  font-family: -apple-system, sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+  border-radius: 20px;
+  opacity: 0;
+  transform: translateY(6px);
+  animation: msgIn 0.3s ease forwards;
+}
+
+.demo-msg.user {
+  align-self: flex-end;
+  background: linear-gradient(135deg, #0062e6, #33aeff);
+  color: #fff;
+}
+
+.demo-msg.bot {
+  align-self: flex-start;
+  background: #efefef;
+  color: #262626;
+}
+
+.demo-msg:nth-child(1) { animation-delay: 0.5s; }
+.demo-msg:nth-child(2) { animation-delay: 1.4s; }
+.demo-msg:nth-child(3) { animation-delay: 2.0s; }
+.demo-msg:nth-child(4) { animation-delay: 3.0s; }
+.demo-msg:nth-child(5) { animation-delay: 3.8s; }
+.demo-msg:nth-child(6) { animation-delay: 4.4s; }
+
+@keyframes msgIn {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Comparison Table ── */
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2rem 0;
+  font-size: 0.75rem;
+}
+
+.compare-table th {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 0.85rem;
+  text-align: left;
+  padding: 1rem;
+  border-bottom: 2px solid var(--line);
+  color: var(--text);
+}
+
+.compare-table td {
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid var(--line);
+  color: var(--text-2);
+  line-height: 1.7;
+  vertical-align: top;
+}
+
+.compare-table tr:hover td {
+  background: var(--olive-bg);
+}
+
+.compare-table .dim { color: var(--text-3); }
+.compare-table .hl { color: var(--olive); font-weight: 700; }
+
+/* ── Stats ── */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 1.2rem;
+  text-align: center;
+  transition: all 0.3s;
+}
+
+.stat-card:hover {
+  border-color: var(--olive-light);
+  transform: translateY(-2px);
+}
+
+.stat-val {
+  font-family: var(--serif);
+  font-size: 1.8rem;
+  font-weight: 300;
+  color: var(--olive);
+  line-height: 1.2;
+}
+
+.stat-label {
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-top: 0.4rem;
+}
+
+/* ── Divider ── */
+.divider {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: 0;
+}
+
+/* ── Footer ── */
+.site-footer {
+  padding: 2.5rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.62rem;
+  color: var(--text-3);
+  letter-spacing: 0.04em;
+}
+
+.site-footer .made {
+  display: flex; align-items: center; gap: 0.5rem;
+}
+
+.site-footer .heart {
+  display: inline-block;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--olive);
+}
+
+/* ── Reveal ── */
+.rv {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.rv.v { opacity:1; transform:translateY(0); }
+.stagger .rv:nth-child(1) { transition-delay: 0s; }
+.stagger .rv:nth-child(2) { transition-delay: 0.08s; }
+.stagger .rv:nth-child(3) { transition-delay: 0.16s; }
+.stagger .rv:nth-child(4) { transition-delay: 0.24s; }
+.stagger .rv:nth-child(5) { transition-delay: 0.32s; }
+.stagger .rv:nth-child(6) { transition-delay: 0.40s; }
+
+/* ── Responsive ── */
+@media (max-width: 700px) {
+  .container { padding: 0 1.2rem; }
+  .flow { flex-direction: column; align-items: center; }
+  .flow-arrow { transform: rotate(90deg); padding: 0.3rem 0; }
+  .flow-step { min-width: auto; width: 100%; max-width: 260px; }
+  .features-grid { grid-template-columns: 1fr; }
+  .stats-row { grid-template-columns: 1fr 1fr; }
+  .stack-grid { grid-template-columns: 1fr; }
+  .hero h1 { font-size: clamp(2rem, 8vw, 3rem); }
+  .site-footer { flex-direction: column; gap: 0.5rem; }
+  .compare-table { font-size: 0.65rem; }
+  .compare-table th, .compare-table td { padding: 0.6rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<section class="hero" style="position:relative;">
+  <div class="hero-inner">
+    <div class="hero-badge">Technical Showcase</div>
+    <h1>An AI that <em>talks</em> like a real person</h1>
+    <p class="hero-desc">
+      Aime is a chatbot that replicates a real person's texting style &mdash;
+      not by fine-tuning, but by statistically analyzing thousands of
+      real chat messages and encoding the patterns into a system prompt.
+    </p>
+    <div class="hero-links">
+      <a href="https://aime.ning.codes" target="_blank">Try Aime &rarr;</a>
+      <a href="#pipeline">Training Pipeline</a>
+      <a href="#architecture">Runtime Architecture</a>
+      <a href="#rag">RAG Analysis</a>
+    </div>
+  </div>
+  <div class="scroll-hint">scroll to explore</div>
+</section>
+
+<div class="snap-page">
+<!-- Chat Demo -->
+<section class="content-sec">
+  <div class="container">
+    <div class="sec-label rv">Live Preview</div>
+    <h2 class="sec-title rv">Feels like <em>texting</em> a friend</h2>
+    <p class="sec-desc rv">
+      Multi-bubble replies arrive with natural typing delays
+      proportional to message length, simulating real human texting rhythm.
+    </p>
+
+    <div class="chat-demo rv" id="chatDemo">
+      <div class="demo-header">
+        <div class="demo-avatar">N</div>
+        <div>
+          <div class="demo-name">Ning</div>
+          <div class="demo-status">Active now</div>
+        </div>
+      </div>
+      <div class="demo-messages" id="demoMessages">
+        <div class="demo-msg user">what have you been up to lately</div>
+        <div class="demo-msg bot">been doing vibe coding nonstop</div>
+        <div class="demo-msg bot">built like 5 projects already, kinda addicting</div>
+        <div class="demo-msg user">what's vibe coding</div>
+        <div class="demo-msg bot">you just describe what you want and AI writes the code for you</div>
+        <div class="demo-msg bot">this chat app was built that way actually &#128526;</div>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+
+<div class="snap-page">
+<!-- Stats -->
+<div class="container">
+  <div class="stats-row rv-group">
+    <div class="stat-card rv">
+      <div class="stat-val">5K+</div>
+      <div class="stat-label">Chat pairs analyzed</div>
+    </div>
+    <div class="stat-card rv">
+      <div class="stat-val">7</div>
+      <div class="stat-label">Style dimensions</div>
+    </div>
+    <div class="stat-card rv">
+      <div class="stat-val">185</div>
+      <div class="stat-label">System prompt lines</div>
+    </div>
+    <div class="stat-card rv">
+      <div class="stat-val">0</div>
+      <div class="stat-label">Fine-tuned weights</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="snap-page snap-scroll">
+<!-- Training Pipeline -->
+<section class="content-sec" id="pipeline">
+  <div class="container">
+    <div class="sec-label rv">Training Pipeline</div>
+    <h2 class="sec-title rv">From chat exports to <em>persona</em></h2>
+    <p class="sec-desc rv">
+      No model training required. Instead, we extract statistical
+      patterns from real WeChat conversations and encode them
+      directly into a structured system prompt.
+    </p>
+
+    <div class="pipeline rv">
+      <div class="pipe-step">
+        <div class="pipe-dot">1</div>
+        <div class="pipe-content">
+          <h4>Export &amp; Parse WeChat History</h4>
+          <p>Raw HTML files from WeChatExporter are parsed with BeautifulSoup. The parser handles
+            paginated JS files, converts WeChat emoji <code>&lt;img&gt;</code> tags back to Unicode,
+            and filters out media messages (images, voice, video, red packets).</p>
+          <div class="pipe-detail">Consecutive messages from the same person within 2 minutes are merged
+            into single blocks &mdash; matching how people actually send multiple short WeChat messages.</div>
+        </div>
+      </div>
+
+      <div class="pipe-step">
+        <div class="pipe-dot">2</div>
+        <div class="pipe-content">
+          <h4>Build Conversation Pairs</h4>
+          <p>Each pair captures: up to 5 context messages from the other person, followed by
+            the target person's response. Stored as JSONL with timestamp and conversation partner name.</p>
+          <div class="pipe-detail">Output: <code>chat_pairs.jsonl</code> &mdash; structured (context, response) pairs ready for analysis.</div>
+        </div>
+      </div>
+
+      <div class="pipe-step">
+        <div class="pipe-dot">3</div>
+        <div class="pipe-content">
+          <h4>Statistical Style Analysis</h4>
+          <p>Seven dimensions of communication style are quantified from the response corpus:</p>
+          <div class="pipe-detail">
+<b>Message length</b> &mdash; avg, median, short/medium/long distribution
+<b>Punctuation</b> &mdash; % ending with period, !, ?, ellipsis, or nothing
+<b>Filler words</b> &mdash; top 15 catchphrases with frequency counts
+<b>Emoji usage</b> &mdash; % of messages with emojis, top 10 favorites
+<b>Multiline tendency</b> &mdash; % of multi-send messages
+<b>Language mix</b> &mdash; % Chinese/English/mixed messages
+<b>Summary</b> &mdash; human-readable style rules generated from data</div>
+        </div>
+      </div>
+
+      <div class="pipe-step">
+        <div class="pipe-dot">4</div>
+        <div class="pipe-content">
+          <h4>Select Representative Examples</h4>
+          <p>20 chat examples are algorithmically selected from thousands of pairs to maximize diversity:</p>
+          <div class="pipe-detail">
+1/3 contain top catchphrases (personality signal)
+1/3 sampled across length buckets (short/medium/long)
+1/3 random (natural variety)</div>
+        </div>
+      </div>
+
+      <div class="pipe-step">
+        <div class="pipe-dot">5</div>
+        <div class="pipe-content">
+          <h4>Assemble System Prompt</h4>
+          <p>All data sources merge into a ~4000-character structured prompt:
+            personal QA profile + statistical style rules + selected examples + behavioral guardrails + mode-switching logic.</p>
+          <div class="pipe-detail">The prompt is the entire "model" &mdash; no weights modified, fully editable, instantly deployable.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="expandable rv">
+      <div class="expand-header" onclick="toggleExpand(this)">
+        <h4>System Prompt Structure (10 sections)</h4>
+        <span class="expand-toggle">&#9654;</span>
+      </div>
+      <div class="expand-body">
+        <div class="expand-content">&num;1  Identity &mdash; Name, age (dynamically calculated from birth year), location, job, family
+&num;2  Personality &mdash; Humor style, values, social role, communication traits
+&num;3  Interests &mdash; Sports, reading, vibe coding, recent projects
+&num;4  Behavioral Rules &mdash; How to handle help requests, emotional support, lending money
+&num;5  Hard Boundaries &mdash; Never reveal: address, phone, ID, company internals
+    Graceful refusal: humor deflection, "I'd rather not say"
+&num;6  Unknown Handling &mdash; Never fabricate: weather, dates, friend names, personal stats
+    Fallback: "not sure" / "you guess" / "forgot exactly when"
+&num;7  Speech Style Rules &mdash; Quantified from real data:
+    14.2 avg chars/msg, 44.4% under 10 chars
+    97% no ending punctuation, 18.2% emoji usage
+    29.3% Chinese-English code-switching
+&num;8  Chat Examples &mdash; 20 algorithmically selected real conversations
+&num;9  Mode Switching &mdash; Casual mode (default, 5-20 chars) vs Knowledge mode (longer, technical depth)
+&num;10 Instruction Suffix &mdash; Appended to every user message: "reply as Ning, split into short messages"</div>
+      </div>
+    </div>
+
+    <div class="code-block rv">
+<span class="comment">// Style rules are generated from statistical analysis, not handwritten</span>
+<span class="keyword">const</span> styleRules = {
+  <span class="fn">avgLength</span>:     <span class="string">14.2</span>,    <span class="comment">// chars per message</span>
+  <span class="fn">shortMsgPct</span>:   <span class="string">44.4</span>,    <span class="comment">// % messages under 10 chars</span>
+  <span class="fn">noPunctuation</span>: <span class="string">97.0</span>,    <span class="comment">// % messages with no ending punctuation</span>
+  <span class="fn">emojiUsage</span>:    <span class="string">18.2</span>,    <span class="comment">// % messages containing emoji</span>
+  <span class="fn">mixedLangPct</span>:  <span class="string">29.3</span>,    <span class="comment">// % messages mixing Chinese + English</span>
+  <span class="fn">topFillers</span>:    [<span class="string">"haha"</span>, <span class="string">"hmm"</span>, <span class="string">"kk"</span>, <span class="string">"nice"</span>],
+  <span class="fn">topEmojis</span>:     [<span class="string">"&#128514;"</span>, <span class="string">"&#128557;"</span>, <span class="string">"&#129326;"</span>, <span class="string">"&#128580;"</span>, <span class="string">"&#128527;"</span>, <span class="string">"&#128077;"</span>],
+};
+
+<span class="comment">// Generation config enforces brevity</span>
+<span class="keyword">const</span> config = { <span class="fn">maxOutputTokens</span>: <span class="string">128</span>, <span class="fn">temperature</span>: <span class="string">0.8</span> };
+    </div>
+  </div>
+</section>
+</div>
+
+<div class="snap-page">
+<!-- Runtime Architecture -->
+<section class="content-sec" id="architecture">
+  <div class="container">
+    <div class="sec-label rv">Runtime Architecture</div>
+    <h2 class="sec-title rv">How a message <em>flows</em></h2>
+    <p class="sec-desc rv">
+      From the moment you hit send to the typing dots disappearing &mdash;
+      every message travels through this serverless pipeline.
+    </p>
+
+    <div class="flow rv">
+      <div class="flow-step">
+        <div class="flow-node">
+          <div class="icon">&#128172;</div>
+          <h4>User Input</h4>
+          <p>React frontend captures message + session context</p>
+        </div>
+      </div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-step">
+        <div class="flow-node">
+          <div class="icon">&#9889;</div>
+          <h4>Vercel Function</h4>
+          <p>Builds prompt with sliding context window (last 20 turns)</p>
+        </div>
+      </div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-step">
+        <div class="flow-node">
+          <div class="icon">&#129504;</div>
+          <h4>Gemini 2.0 Flash</h4>
+          <p>Generates reply with persona system prompt + conversation history</p>
+        </div>
+      </div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-step">
+        <div class="flow-node">
+          <div class="icon">&#128466;</div>
+          <h4>Upstash Redis</h4>
+          <p>Logs conversation for review &amp; rating (90-day TTL)</p>
+        </div>
+      </div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-step">
+        <div class="flow-node">
+          <div class="icon">&#128241;</div>
+          <h4>Chat UI</h4>
+          <p>Multi-bubble display with staggered typing delays</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+
+<div class="snap-page">
+<!-- Tech Stack -->
+<section class="content-sec" id="stack">
+  <div class="container">
+    <div class="sec-label rv">Tech Stack</div>
+    <h2 class="sec-title rv">Built with <em>modern</em> tools</h2>
+    <p class="sec-desc rv">
+      Minimal dependencies, maximum capability.
+      Each piece chosen for simplicity and performance.
+    </p>
+
+    <div class="stack-grid stagger">
+      <div class="stack-card rv">
+        <div class="stack-icon">&#9883;&#65039;</div>
+        <h3>React 19 + TypeScript</h3>
+        <p>Latest React with full type safety. Vite-powered dev with instant HMR.</p>
+        <span class="stack-tag">Frontend</span>
+      </div>
+      <div class="stack-card rv">
+        <div class="stack-icon">&#129302;</div>
+        <h3>Gemini 2.0 Flash</h3>
+        <p>Google's fast multimodal model. Low latency for chat-like response times.</p>
+        <span class="stack-tag">AI / LLM</span>
+      </div>
+      <div class="stack-card rv">
+        <div class="stack-icon">&#128308;</div>
+        <h3>Upstash Redis</h3>
+        <p>Serverless Redis for conversation logging. Per-request pricing, zero cold starts.</p>
+        <span class="stack-tag">Database</span>
+      </div>
+      <div class="stack-card rv">
+        <div class="stack-icon">&#9650;</div>
+        <h3>Vercel Functions</h3>
+        <p>Serverless API endpoints. Auto-scaling, edge-optimized, zero config deployment.</p>
+        <span class="stack-tag">Backend</span>
+      </div>
+      <div class="stack-card rv">
+        <div class="stack-icon">&#128230;</div>
+        <h3>Vite 7</h3>
+        <p>Lightning-fast build tool. ESM-native, sub-second cold starts in dev.</p>
+        <span class="stack-tag">Build</span>
+      </div>
+      <div class="stack-card rv">
+        <div class="stack-icon">&#128269;</div>
+        <h3>Review System</h3>
+        <p>Built-in conversation review page for rating quality by session. Export to JSON for iterative prompt tuning.</p>
+        <span class="stack-tag">Tooling</span>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+
+<div class="snap-page">
+<!-- Key Features -->
+<section class="content-sec">
+  <div class="container">
+    <div class="sec-label rv">Key Features</div>
+    <h2 class="sec-title rv">What makes it <em>work</em></h2>
+    <p class="sec-desc rv">
+      The details that make an AI chatbot feel like a real person texting you back.
+    </p>
+
+    <div class="features-grid stagger">
+      <div class="feat-card rv">
+        <h3>&#127917; Data-Driven Persona</h3>
+        <p>Instead of handwriting style rules, every number in the prompt (14.2 avg chars, 97% no punctuation, 18.2% emoji) comes from statistical analysis of real chat data.</p>
+      </div>
+      <div class="feat-card rv">
+        <h3>&#128172; Multi-Bubble Replies</h3>
+        <p>Responses split into 1-3 short messages with <code>staggered typing delays</code> proportional to message length. Mimics real texting rhythm instead of a single wall of text.</p>
+      </div>
+      <div class="feat-card rv">
+        <h3>&#129504; Context Window</h3>
+        <p>Sliding window of last 20 messages sent to the model. Older messages referenced via a system note to maintain conversational continuity without hitting token limits.</p>
+      </div>
+      <div class="feat-card rv">
+        <h3>&#128202; Conversation Review</h3>
+        <p>Standalone review page for rating conversations by session. Filter by quality, export JSON. Creates a feedback loop for iteratively improving the system prompt.</p>
+      </div>
+      <div class="feat-card rv">
+        <h3>&#128274; Safety Boundaries</h3>
+        <p>Strict rules against leaking personal info (address, phone, ID), company internals, or fabricating facts. Graceful deflection with humor when pushed.</p>
+      </div>
+      <div class="feat-card rv">
+        <h3>&#127919; Dual Mode</h3>
+        <p>Casual mode (default): short, playful, 5-20 chars. Knowledge mode: triggered by tech questions, allows longer answers with the same personality voice.</p>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+
+<div class="snap-page snap-scroll">
+<!-- RAG Analysis -->
+<section class="content-sec" id="rag">
+  <div class="container">
+    <div class="sec-label rv">RAG Analysis</div>
+    <h2 class="sec-title rv">Would RAG <em>help</em>?</h2>
+    <p class="sec-desc rv">
+      The Python prototype includes a full RAG pipeline. Here's how it works
+      and whether it's worth the added complexity for production.
+    </p>
+
+    <div class="expandable rv">
+      <div class="expand-header" onclick="toggleExpand(this)">
+        <h4>How the RAG pipeline works</h4>
+        <span class="expand-toggle">&#9654;</span>
+      </div>
+      <div class="expand-body">
+        <div class="expand-content"><b>Indexing phase</b>
+Each (context, response) pair is converted to flat text and embedded
+using Gemini's embedding model (768-dim vectors). Stored as a NumPy
+.npz file with normalized vectors for fast cosine similarity.
+
+Quality filters applied: min 4 chars, deduplicated responses,
+max 5000 pairs per conversation partner (uniform sampling if more).
+
+<b>Retrieval phase</b>
+When a user sends a message, it's embedded with the same model.
+Cosine similarity is computed against all stored vectors.
+Top-5 most similar past conversations are returned and injected
+into the prompt as "here's how Ning responded in similar situations."
+
+<b>Key insight</b>
+The RAG doesn't retrieve facts &mdash; it retrieves <i>style examples</i>.
+It answers: "When someone asked something similar, how did Ning reply?"</div>
+      </div>
+    </div>
+
+    <table class="compare-table rv">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Current (Prompt-only)</th>
+          <th>With RAG</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>Latency</b></td>
+          <td class="hl">~800ms total</td>
+          <td>+300-500ms for embedding + similarity search</td>
+        </tr>
+        <tr>
+          <td><b>Cost</b></td>
+          <td class="hl">1 API call per message</td>
+          <td>2 API calls (embedding + generation)</td>
+        </tr>
+        <tr>
+          <td><b>Infrastructure</b></td>
+          <td class="hl">Stateless serverless function</td>
+          <td>Needs vector store (in-memory or external DB)</td>
+        </tr>
+        <tr>
+          <td><b>Style accuracy</b></td>
+          <td>Statistical rules + 20 fixed examples</td>
+          <td class="hl">Dynamic examples matched to input context</td>
+        </tr>
+        <tr>
+          <td><b>Edge cases</b></td>
+          <td>Falls back to general LLM behavior</td>
+          <td class="hl">Can surface rare but relevant past responses</td>
+        </tr>
+        <tr>
+          <td><b>Cold start</b></td>
+          <td class="hl">Zero &mdash; prompt is static</td>
+          <td>Must load vector index (~5K embeddings)</td>
+        </tr>
+        <tr>
+          <td><b>Maintenance</b></td>
+          <td class="hl">Edit one text file</td>
+          <td>Rebuild embeddings when chat data updates</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="features-grid stagger" style="margin-top:2rem;">
+      <div class="feat-card rv">
+        <h3>&#9989; When RAG helps</h3>
+        <p><b>Niche topics.</b> If someone asks about a specific shared memory ("remember that restaurant?"), RAG can surface the actual past conversation. The static prompt can't. Also improves consistency for rare catchphrases and topic-specific vocabulary.</p>
+      </div>
+      <div class="feat-card rv">
+        <h3>&#10060; When RAG is overkill</h3>
+        <p><b>Casual chat.</b> For "what's up" / "how are you" type exchanges, the statistical style rules already produce natural responses. RAG adds latency and cost without meaningful quality improvement for common conversation patterns.</p>
+      </div>
+    </div>
+
+    <div class="expandable rv" style="margin-top:1.5rem;">
+      <div class="expand-header" onclick="toggleExpand(this)">
+        <h4>Verdict: Prompt-only is the right call (for now)</h4>
+        <span class="expand-toggle">&#9654;</span>
+      </div>
+      <div class="expand-body">
+        <div class="expand-content">The current approach prioritizes simplicity and speed:
+
+<b>1. Latency matters most for chat UX.</b>
+Every 100ms of delay makes the bot feel less human. The prompt-only
+approach is a single API call with zero preprocessing.
+
+<b>2. The "style memory" problem is already solved.</b>
+Statistical analysis + curated examples capture 90%+ of the persona.
+RAG's marginal improvement is in the long tail of rare interactions.
+
+<b>3. Serverless architecture stays clean.</b>
+No vector store to host, no embeddings to rebuild, no cold start
+penalty. The entire backend is a single stateless function.
+
+<b>4. The review system is the real feedback loop.</b>
+Instead of RAG, quality improves through: rate conversations &rarr;
+identify failure patterns &rarr; update prompt rules &rarr; redeploy.
+This human-in-the-loop approach is more targeted than retrieval.
+
+<b>When to reconsider:</b>
+If the bot needs to reference specific shared memories ("that trip
+we took"), recall factual details from past conversations, or
+handle 10+ conversation partners with distinct relationship dynamics.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<div class="container">
+  <footer class="site-footer">
+    <div class="made">
+      <span class="heart"></span>
+      <span>Built by Ning with vibe coding</span>
+    </div>
+    <span>ning.codes / 2025</span>
+  </footer>
+</div>
+</div>
+
+<script>
+// Scroll reveal
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('v');
+      obs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.rv').forEach(el => obs.observe(el));
+
+// Also reveal rv-group children
+document.querySelectorAll('.rv-group').forEach(group => {
+  const groupObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.querySelectorAll('.rv').forEach(child => child.classList.add('v'));
+        groupObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  groupObs.observe(group);
+});
+
+// Expandable toggle
+function toggleExpand(header) {
+  const body = header.nextElementSibling;
+  const toggle = header.querySelector('.expand-toggle');
+  body.classList.toggle('open');
+  toggle.classList.toggle('open');
+  header.classList.toggle('open');
+}
+
+// Replay chat demo when visible
+const demoObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const msgs = e.target.querySelectorAll('.demo-msg');
+      msgs.forEach(msg => {
+        msg.style.animation = 'none';
+        msg.offsetHeight;
+        msg.style.animation = '';
+      });
+    }
+  });
+}, { threshold: 0.3 });
+
+const chatDemo = document.getElementById('chatDemo');
+if (chatDemo) demoObs.observe(chatDemo);
+</script>
+
+</body>
+</html>
