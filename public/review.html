@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>aime - Review Conversations</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #f5f5f5; color: #262626;
+  padding: 16px; max-width: 700px; margin: 0 auto;
+}
+h1 { font-size: 20px; margin-bottom: 4px; }
+.subtitle { font-size: 13px; color: #8e8e8e; margin-bottom: 16px; }
+.filters {
+  display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; align-items: center;
+}
+.filters button {
+  padding: 6px 14px; border-radius: 16px; border: 1px solid #dbdbdb;
+  background: #fff; font-size: 13px; cursor: pointer;
+}
+.filters button.active { background: #0062e6; color: #fff; border-color: #0062e6; }
+.export-btn {
+  margin-left: auto; padding: 6px 14px; border-radius: 16px;
+  border: 1px solid #dbdbdb; background: #fff; font-size: 13px; cursor: pointer;
+}
+.view-toggle {
+  display: flex; gap: 4px; margin-bottom: 12px;
+}
+.view-toggle button {
+  padding: 4px 12px; border-radius: 12px; border: 1px solid #dbdbdb;
+  background: #fff; font-size: 12px; cursor: pointer;
+}
+.view-toggle button.active { background: #333; color: #fff; border-color: #333; }
+.session-card {
+  background: #fff; border-radius: 12px; margin-bottom: 14px;
+  border: 1px solid #efefef; overflow: hidden;
+}
+.session-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 14px; cursor: pointer; user-select: none;
+}
+.session-header:hover { background: #fafafa; }
+.session-info { display: flex; flex-direction: column; gap: 2px; }
+.session-id { font-size: 12px; color: #8e8e8e; font-family: monospace; }
+.session-meta { font-size: 12px; color: #8e8e8e; }
+.session-badge {
+  display: flex; gap: 4px; align-items: center;
+}
+.badge {
+  font-size: 11px; padding: 2px 8px; border-radius: 10px;
+}
+.badge.good { background: #e8f5e9; color: #2e7d32; }
+.badge.bad { background: #fce4ec; color: #c62828; }
+.badge.unrated { background: #f5f5f5; color: #999; }
+.arrow { font-size: 12px; color: #999; transition: transform 0.2s; }
+.arrow.open { transform: rotate(90deg); }
+.session-body { display: none; padding: 0 14px 14px; }
+.session-body.open { display: block; }
+.chat-thread {
+  display: flex; flex-direction: column; gap: 4px;
+  padding: 12px; background: #fafafa; border-radius: 8px;
+}
+.turn-divider {
+  text-align: center; font-size: 10px; color: #ccc;
+  margin: 8px 0; border-top: 1px dashed #e0e0e0; padding-top: 8px;
+}
+.user-msg {
+  align-self: flex-end; background: linear-gradient(135deg, #0062e6, #33aeff);
+  color: #fff; padding: 8px 12px; border-radius: 16px; font-size: 14px; max-width: 80%;
+}
+.bot-msg {
+  align-self: flex-start; background: #efefef;
+  padding: 8px 12px; border-radius: 16px; font-size: 14px; max-width: 80%;
+}
+.turn-rating {
+  display: flex; gap: 4px; justify-content: flex-end; margin-top: 4px;
+}
+.rate-btn {
+  width: 28px; height: 28px; border-radius: 50%; border: 1px solid #dbdbdb;
+  background: #fff; cursor: pointer; font-size: 14px; display: flex;
+  align-items: center; justify-content: center;
+}
+.rate-btn.selected { border-color: transparent; }
+.rate-btn.good.selected { background: #e8f5e9; }
+.rate-btn.bad.selected { background: #fce4ec; }
+/* Legacy flat view */
+.card {
+  background: #fff; border-radius: 12px; padding: 14px; margin-bottom: 10px;
+  border: 1px solid #efefef;
+}
+.card-header {
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;
+}
+.card-time { font-size: 12px; color: #8e8e8e; }
+.card-rating { display: flex; gap: 6px; }
+.card .rate-btn { width: 32px; height: 32px; font-size: 16px; }
+.context-toggle {
+  font-size: 12px; color: #0062e6; cursor: pointer; margin-bottom: 8px;
+  background: none; border: none;
+}
+.context { display: none; margin-bottom: 8px; padding: 12px; background: #fafafa; border-radius: 8px; }
+.context.show { display: flex; flex-direction: column; gap: 4px; }
+.exchange { display: flex; flex-direction: column; gap: 4px; }
+.exchange-divider {
+  text-align: center; font-size: 11px; color: #bbb;
+  margin: 6px 0; border-top: 1px solid #efefef; padding-top: 6px;
+}
+.empty { text-align: center; color: #8e8e8e; padding: 40px; }
+.count { font-size: 13px; color: #8e8e8e; }
+</style>
+</head>
+<body>
+<h1>Conversation Review</h1>
+<div class="subtitle">Rate conversations to improve the bot</div>
+
+<div class="view-toggle">
+  <button class="active" data-view="session">By Session</button>
+  <button data-view="flat">Flat</button>
+</div>
+
+<div class="filters">
+  <button class="active" data-filter="all">All <span class="count"></span></button>
+  <button data-filter="unrated">Unrated <span class="count"></span></button>
+  <button data-filter="good">Good <span class="count"></span></button>
+  <button data-filter="bad">Bad <span class="count"></span></button>
+  <button class="export-btn" onclick="exportJSON()">Export JSON</button>
+</div>
+
+<div id="list"></div>
+
+<script>
+let conversations = [];
+let filter = 'all';
+let viewMode = 'session';
+
+async function load() {
+  document.getElementById('list').innerHTML = '<div class="empty">Loading...</div>';
+  const res = await fetch('/api/conversations');
+  conversations = await res.json();
+  render();
+}
+
+function getFilteredConvs() {
+  return conversations.filter(c => {
+    if (filter === 'unrated') return !c.rating;
+    if (filter === 'good') return c.rating === 'good';
+    if (filter === 'bad') return c.rating === 'bad';
+    return true;
+  });
+}
+
+function updateCounts() {
+  document.querySelectorAll('.filters button[data-filter]').forEach(btn => {
+    const f = btn.dataset.filter;
+    let count = conversations.length;
+    if (f === 'unrated') count = conversations.filter(c => !c.rating).length;
+    if (f === 'good') count = conversations.filter(c => c.rating === 'good').length;
+    if (f === 'bad') count = conversations.filter(c => c.rating === 'bad').length;
+    btn.querySelector('.count').textContent = `(${count})`;
+  });
+}
+
+function render() {
+  updateCounts();
+  if (viewMode === 'session') renderSession();
+  else renderFlat();
+}
+
+function renderSession() {
+  const list = document.getElementById('list');
+  const filtered = getFilteredConvs();
+
+  // Group by sessionId
+  const groups = {};
+  for (const c of filtered) {
+    const sid = c.sessionId || 'unknown';
+    if (!groups[sid]) groups[sid] = [];
+    groups[sid].push(c);
+  }
+
+  // Sort sessions by latest message time (newest first)
+  const sessionIds = Object.keys(groups).sort((a, b) => {
+    const latestA = Math.max(...groups[a].map(c => c.ts));
+    const latestB = Math.max(...groups[b].map(c => c.ts));
+    return latestB - latestA;
+  });
+
+  if (sessionIds.length === 0) {
+    list.innerHTML = '<div class="empty">No conversations yet</div>';
+    return;
+  }
+
+  list.innerHTML = sessionIds.map(sid => {
+    const convs = groups[sid].sort((a, b) => a.ts - b.ts);
+    const firstTime = new Date(convs[0].ts).toLocaleString('zh-CN', { timeZone: 'America/Los_Angeles' });
+    const lastTime = new Date(convs[convs.length - 1].ts).toLocaleString('zh-CN', { timeZone: 'America/Los_Angeles' });
+    const goodCount = convs.filter(c => c.rating === 'good').length;
+    const badCount = convs.filter(c => c.rating === 'bad').length;
+    const unratedCount = convs.filter(c => !c.rating).length;
+    const shortId = sid === 'unknown' ? 'unknown' : sid.slice(0, 16) + '...';
+
+    return `
+      <div class="session-card">
+        <div class="session-header" onclick="toggleSession(this)">
+          <div class="session-info">
+            <span class="session-id">${esc(shortId)}</span>
+            <span class="session-meta">${convs.length} turns &middot; ${firstTime} ~ ${lastTime}</span>
+          </div>
+          <div class="session-badge">
+            ${goodCount ? `<span class="badge good">${goodCount} good</span>` : ''}
+            ${badCount ? `<span class="badge bad">${badCount} bad</span>` : ''}
+            ${unratedCount ? `<span class="badge unrated">${unratedCount} unrated</span>` : ''}
+            <span class="arrow">&#9654;</span>
+          </div>
+        </div>
+        <div class="session-body">
+          <div class="chat-thread">
+            ${convs.map((c, i) => {
+              let html = '';
+              if (i > 0) html += '<div class="turn-divider"></div>';
+              html += `<div class="user-msg">${esc(c.userMessage)}</div>`;
+              html += c.botReplies.map(r => `<div class="bot-msg">${esc(r)}</div>`).join('');
+              html += `<div class="turn-rating">
+                <button class="rate-btn good ${c.rating === 'good' ? 'selected' : ''}"
+                  onclick="event.stopPropagation();rate('${c.id}','good')">&#x1F44D;</button>
+                <button class="rate-btn bad ${c.rating === 'bad' ? 'selected' : ''}"
+                  onclick="event.stopPropagation();rate('${c.id}','bad')">&#x1F44E;</button>
+              </div>`;
+              return html;
+            }).join('')}
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderFlat() {
+  const list = document.getElementById('list');
+  const filtered = getFilteredConvs();
+
+  if (filtered.length === 0) {
+    list.innerHTML = '<div class="empty">No conversations yet</div>';
+    return;
+  }
+
+  list.innerHTML = filtered.map(c => {
+    const date = new Date(c.ts).toLocaleString('zh-CN', { timeZone: 'America/Los_Angeles' });
+    const hasHistory = c.history && c.history.length > 0;
+    return `
+      <div class="card" data-id="${c.id}">
+        <div class="card-header">
+          <span class="card-time">${date}${c.sessionId ? ` &middot; <span style="font-family:monospace">${esc((c.sessionId||'').slice(0,12))}</span>` : ''}</span>
+          <div class="card-rating">
+            <button class="rate-btn good ${c.rating === 'good' ? 'selected' : ''}"
+              onclick="rate('${c.id}', 'good')">&#x1F44D;</button>
+            <button class="rate-btn bad ${c.rating === 'bad' ? 'selected' : ''}"
+              onclick="rate('${c.id}', 'bad')">&#x1F44E;</button>
+          </div>
+        </div>
+        ${hasHistory ? `<button class="context-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Show context (${c.history.length} messages)</button>
+        <div class="context">${c.history.map(m =>
+          m.role === 'user'
+            ? `<div class="user-msg">${esc(m.content)}</div>`
+            : `<div class="bot-msg">${esc(m.content)}</div>`
+        ).join('')}</div>` : ''}
+        ${hasHistory ? '<div class="exchange-divider">— current turn —</div>' : ''}
+        <div class="exchange">
+          <div class="user-msg">${esc(c.userMessage)}</div>
+          ${c.botReplies.map(r => `<div class="bot-msg">${esc(r)}</div>`).join('')}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function toggleSession(header) {
+  const body = header.nextElementSibling;
+  const arrow = header.querySelector('.arrow');
+  body.classList.toggle('open');
+  arrow.classList.toggle('open');
+}
+
+function esc(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+async function rate(id, rating) {
+  const conv = conversations.find(c => c.id === id);
+  if (!conv) return;
+  const newRating = conv.rating === rating ? null : rating;
+  conv.rating = newRating;
+  render();
+  await fetch('/api/conversations', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id, rating: newRating }),
+  });
+}
+
+function exportJSON() {
+  const data = JSON.stringify(conversations, null, 2);
+  const blob = new Blob([data], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `aime-conversations-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// Filter buttons
+document.querySelectorAll('.filters button[data-filter]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    filter = btn.dataset.filter;
+    document.querySelectorAll('.filters button[data-filter]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    render();
+  });
+});
+
+// View toggle
+document.querySelectorAll('.view-toggle button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    viewMode = btn.dataset.view;
+    document.querySelectorAll('.view-toggle button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    render();
+  });
+});
+
+load();
+</script>
+</body>
+</html>

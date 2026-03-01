@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
+import avatarImg from './avatar.jpg'
 
 const API_URL = import.meta.env.VITE_API_URL || ''
 
@@ -7,8 +8,27 @@ interface Message {
   content: string
 }
 
+const STORAGE_KEY = 'aime-chat-history'
+const SESSION_KEY = 'aime-session-id'
+
+function getSessionId(): string {
+  let id = localStorage.getItem(SESSION_KEY)
+  if (!id) {
+    id = `s_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`
+    localStorage.setItem(SESSION_KEY, id)
+  }
+  return id
+}
+
+function loadHistory(): Message[] {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    return raw ? JSON.parse(raw) : []
+  } catch { return [] }
+}
+
 function App() {
-  const [messages, setMessages] = useState<Message[]>([])
+  const [messages, setMessages] = useState<Message[]>(loadHistory)
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const messagesRef = useRef<HTMLDivElement>(null)
@@ -23,6 +43,10 @@ function App() {
   useEffect(() => {
     scrollToBottom()
   }, [messages, loading, scrollToBottom])
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(messages))
+  }, [messages])
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -47,19 +71,22 @@ function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           message: text,
-          history: newMessages.slice(0, -1),
+          history: newMessages.slice(-21, -1),
+          totalMessages: newMessages.length - 1,
+          sessionId: getSessionId(),
         }),
       })
 
       if (!res.ok) throw new Error('API error')
 
       const data = await res.json()
-      const replies: Message[] = (data.replies || []).map((r: string) => ({
-        role: 'assistant' as const,
-        content: r,
-      }))
+      const replies: string[] = data.replies || []
 
-      setMessages(prev => [...prev, ...replies])
+      for (let i = 0; i < replies.length; i++) {
+        const delay = Math.min(400 + replies[i].length * 80, 2500)
+        await new Promise(r => setTimeout(r, delay))
+        setMessages(prev => [...prev, { role: 'assistant', content: replies[i] }])
+      }
     } catch {
       setMessages(prev => [
         ...prev,
@@ -91,18 +118,21 @@ function App() {
   return (
     <div className="chat-container">
       <div className="chat-header">
-        <div className="avatar">N</div>
+        <img className="avatar" src={avatarImg} alt="Ning" />
         <div className="header-info">
           <div className="header-name">Ning</div>
           <div className="header-status">Active now</div>
         </div>
+        {messages.length > 0 && (
+          <button className="clear-btn" onClick={() => setMessages([])}>New</button>
+        )}
         <div className="header-dot" />
       </div>
 
       <div className="messages" ref={messagesRef}>
         {messages.length === 0 && (
           <div className="welcome">
-            <div className="welcome-avatar">N</div>
+            <img className="welcome-avatar" src={avatarImg} alt="Ning" />
             <h2>Ning</h2>
             <p>An AI that talks like Ning, trained on real WeChat conversations. Say something.</p>
           </div>
@@ -111,7 +141,7 @@ function App() {
         {groupedMessages.map((group, gi) => (
           <div key={gi} className={`message-group ${group[0].role}`}>
             {group[0].role === 'assistant' && (
-              <div className="group-avatar">N</div>
+              <img className="group-avatar" src={avatarImg} alt="Ning" />
             )}
             <div className="bubbles">
               {group.map((msg, mi) => (
@@ -125,7 +155,7 @@ function App() {
 
         {loading && (
           <div className="typing-group">
-            <div className="group-avatar">N</div>
+            <img className="group-avatar" src={avatarImg} alt="Ning" />
             <div className="typing-indicator">
               <div className="typing-dot" />
               <div className="typing-dot" />

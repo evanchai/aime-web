@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="60 60 280 260">
+  <!-- Fluffy fur outline (head shape) -->
+  <ellipse cx="200" cy="195" rx="110" ry="105" fill="#e8d8c4" stroke="#b8a080" stroke-width="1.5"/>
+
+  <!-- Fur tufts around face -->
+  <g fill="#e0ceb8" stroke="#b8a080" stroke-width="0.8">
+    <ellipse cx="145" cy="115" rx="28" ry="22" transform="rotate(-15, 145, 115)"/>
+    <ellipse cx="200" cy="98" rx="25" ry="20"/>
+    <ellipse cx="255" cy="115" rx="28" ry="22" transform="rotate(15, 255, 115)"/>
+    <ellipse cx="110" cy="170" rx="22" ry="28" transform="rotate(-10, 110, 170)"/>
+    <ellipse cx="290" cy="170" rx="22" ry="28" transform="rotate(10, 290, 170)"/>
+    <ellipse cx="140" cy="270" rx="25" ry="18" transform="rotate(10, 140, 270)"/>
+    <ellipse cx="200" cy="278" rx="22" ry="16"/>
+    <ellipse cx="260" cy="270" rx="25" ry="18" transform="rotate(-10, 260, 270)"/>
+  </g>
+
+  <!-- Inner face -->
+  <ellipse cx="200" cy="200" rx="72" ry="68" fill="#f0e6d8" stroke="#c8b098" stroke-width="0.8"/>
+
+  <!-- Ears -->
+  <path d="M130,120 Q120,70 150,90" fill="#dcc8b0" stroke="#b8a080" stroke-width="1.2"/>
+  <path d="M130,120 Q125,75 148,88" fill="#d5bea8" stroke="none"/>
+  <path d="M270,120 Q280,70 250,90" fill="#dcc8b0" stroke="#b8a080" stroke-width="1.2"/>
+  <path d="M270,120 Q275,75 252,88" fill="#d5bea8" stroke="none"/>
+
+  <!-- Eyes -->
+  <ellipse cx="175" cy="190" rx="10" ry="11" fill="#4a3828"/>
+  <ellipse cx="177" cy="187" rx="3.5" ry="4" fill="#fff"/>
+  <ellipse cx="225" cy="190" rx="10" ry="11" fill="#4a3828"/>
+  <ellipse cx="227" cy="187" rx="3.5" ry="4" fill="#fff"/>
+
+  <!-- Nose -->
+  <ellipse cx="200" cy="218" rx="10" ry="8" fill="#5a4838"/>
+  <ellipse cx="202" cy="216" rx="3" ry="2.5" fill="#6a5848" opacity="0.6"/>
+
+  <!-- Mouth -->
+  <path d="M200,226 Q192,238 184,232" fill="none" stroke="#7a6050" stroke-width="1.2" stroke-linecap="round"/>
+  <path d="M200,226 Q208,238 216,232" fill="none" stroke="#7a6050" stroke-width="1.2" stroke-linecap="round"/>
+
+  <!-- Tongue -->
+  <ellipse cx="200" cy="238" rx="6" ry="8" fill="#d4948a" stroke="#c08478" stroke-width="0.6"/>
+</svg>
