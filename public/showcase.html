@@ -49,15 +49,6 @@ body {
   overflow: hidden;
 }
 
-/* For pages with lots of content, allow internal scroll */
-.snap-page.snap-scroll {
-  overflow-y: auto;
-  justify-content: flex-start;
-  padding-top: 3rem;
-  scrollbar-width: none;
-  overscroll-behavior: contain;
-}
-.snap-page.snap-scroll::-webkit-scrollbar { display: none; }
 
 ::selection { background: var(--olive); color: #fff; }
 
@@ -191,7 +182,7 @@ section.content-sec {
   color: var(--text-2);
   line-height: 1.9;
   max-width: 52ch;
-  margin-bottom: 2.5rem;
+  margin-bottom: 1.5rem;
 }
 
 /* ── Tech Stack Grid ── */
@@ -326,14 +317,14 @@ section.content-sec {
   display: flex;
   flex-direction: column;
   gap: 0;
-  margin: 2rem 0;
+  margin: 1rem 0;
   position: relative;
 }
 
 .pipeline::before {
   content: '';
   position: absolute;
-  left: 24px;
+  left: 17px;
   top: 0;
   bottom: 0;
   width: 2px;
@@ -342,24 +333,24 @@ section.content-sec {
 
 .pipe-step {
   display: flex;
-  gap: 1.2rem;
+  gap: 1rem;
   align-items: flex-start;
   position: relative;
-  padding-bottom: 2rem;
+  padding-bottom: 1rem;
 }
 
 .pipe-step:last-child { padding-bottom: 0; }
 
 .pipe-dot {
-  width: 50px;
-  height: 50px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   background: var(--card);
   border: 2px solid var(--line);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.2rem;
+  font-size: 0.85rem;
   flex-shrink: 0;
   z-index: 1;
   transition: all 0.3s;
@@ -372,20 +363,20 @@ section.content-sec {
 
 .pipe-content {
   flex: 1;
-  padding-top: 0.5rem;
+  padding-top: 0.3rem;
 }
 
 .pipe-content h4 {
   font-family: var(--serif);
   font-weight: 400;
-  font-size: 1rem;
-  margin-bottom: 0.3rem;
+  font-size: 0.9rem;
+  margin-bottom: 0.15rem;
 }
 
 .pipe-content p {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: var(--text-2);
-  line-height: 1.8;
+  line-height: 1.7;
 }
 
 .pipe-content code {
@@ -799,30 +790,6 @@ section.content-sec {
 </div>
 
 <div class="snap-page">
-<!-- Stats -->
-<div class="container">
-  <div class="stats-row rv-group">
-    <div class="stat-card rv">
-      <div class="stat-val">5K+</div>
-      <div class="stat-label">Chat pairs analyzed</div>
-    </div>
-    <div class="stat-card rv">
-      <div class="stat-val">7</div>
-      <div class="stat-label">Style dimensions</div>
-    </div>
-    <div class="stat-card rv">
-      <div class="stat-val">185</div>
-      <div class="stat-label">System prompt lines</div>
-    </div>
-    <div class="stat-card rv">
-      <div class="stat-val">0</div>
-      <div class="stat-label">Fine-tuned weights</div>
-    </div>
-  </div>
-</div>
-</div>
-
-<div class="snap-page snap-scroll">
 <!-- Training Pipeline -->
 <section class="content-sec" id="pipeline">
   <div class="container">
@@ -839,11 +806,7 @@ section.content-sec {
         <div class="pipe-dot">1</div>
         <div class="pipe-content">
           <h4>Export &amp; Parse WeChat History</h4>
-          <p>Raw HTML files from WeChatExporter are parsed with BeautifulSoup. The parser handles
-            paginated JS files, converts WeChat emoji <code>&lt;img&gt;</code> tags back to Unicode,
-            and filters out media messages (images, voice, video, red packets).</p>
-          <div class="pipe-detail">Consecutive messages from the same person within 2 minutes are merged
-            into single blocks &mdash; matching how people actually send multiple short WeChat messages.</div>
+          <p>Parse raw HTML exports with BeautifulSoup. Merge consecutive messages, convert emoji tags, filter media.</p>
         </div>
       </div>
 
@@ -851,9 +814,7 @@ section.content-sec {
         <div class="pipe-dot">2</div>
         <div class="pipe-content">
           <h4>Build Conversation Pairs</h4>
-          <p>Each pair captures: up to 5 context messages from the other person, followed by
-            the target person's response. Stored as JSONL with timestamp and conversation partner name.</p>
-          <div class="pipe-detail">Output: <code>chat_pairs.jsonl</code> &mdash; structured (context, response) pairs ready for analysis.</div>
+          <p>Extract (context, response) pairs as JSONL &mdash; up to 5 context messages per response.</p>
         </div>
       </div>
 
@@ -861,15 +822,7 @@ section.content-sec {
         <div class="pipe-dot">3</div>
         <div class="pipe-content">
           <h4>Statistical Style Analysis</h4>
-          <p>Seven dimensions of communication style are quantified from the response corpus:</p>
-          <div class="pipe-detail">
-<b>Message length</b> &mdash; avg, median, short/medium/long distribution
-<b>Punctuation</b> &mdash; % ending with period, !, ?, ellipsis, or nothing
-<b>Filler words</b> &mdash; top 15 catchphrases with frequency counts
-<b>Emoji usage</b> &mdash; % of messages with emojis, top 10 favorites
-<b>Multiline tendency</b> &mdash; % of multi-send messages
-<b>Language mix</b> &mdash; % Chinese/English/mixed messages
-<b>Summary</b> &mdash; human-readable style rules generated from data</div>
+          <p>Quantify 7 dimensions: message length, punctuation, filler words, emoji usage, multiline tendency, language mix, and overall style summary.</p>
         </div>
       </div>
 
@@ -877,11 +830,7 @@ section.content-sec {
         <div class="pipe-dot">4</div>
         <div class="pipe-content">
           <h4>Select Representative Examples</h4>
-          <p>20 chat examples are algorithmically selected from thousands of pairs to maximize diversity:</p>
-          <div class="pipe-detail">
-1/3 contain top catchphrases (personality signal)
-1/3 sampled across length buckets (short/medium/long)
-1/3 random (natural variety)</div>
+          <p>Algorithmically pick 20 diverse examples: 1/3 catchphrases, 1/3 length-balanced, 1/3 random.</p>
         </div>
       </div>
 
@@ -889,51 +838,9 @@ section.content-sec {
         <div class="pipe-dot">5</div>
         <div class="pipe-content">
           <h4>Assemble System Prompt</h4>
-          <p>All data sources merge into a ~4000-character structured prompt:
-            personal QA profile + statistical style rules + selected examples + behavioral guardrails + mode-switching logic.</p>
-          <div class="pipe-detail">The prompt is the entire "model" &mdash; no weights modified, fully editable, instantly deployable.</div>
+          <p>Merge QA profile + style rules + examples + guardrails into a ~4000-char structured prompt. No weights modified.</p>
         </div>
       </div>
-    </div>
-
-    <div class="expandable rv">
-      <div class="expand-header" onclick="toggleExpand(this)">
-        <h4>System Prompt Structure (10 sections)</h4>
-        <span class="expand-toggle">&#9654;</span>
-      </div>
-      <div class="expand-body">
-        <div class="expand-content">&num;1  Identity &mdash; Name, age (dynamically calculated from birth year), location, job, family
-&num;2  Personality &mdash; Humor style, values, social role, communication traits
-&num;3  Interests &mdash; Sports, reading, vibe coding, recent projects
-&num;4  Behavioral Rules &mdash; How to handle help requests, emotional support, lending money
-&num;5  Hard Boundaries &mdash; Never reveal: address, phone, ID, company internals
-    Graceful refusal: humor deflection, "I'd rather not say"
-&num;6  Unknown Handling &mdash; Never fabricate: weather, dates, friend names, personal stats
-    Fallback: "not sure" / "you guess" / "forgot exactly when"
-&num;7  Speech Style Rules &mdash; Quantified from real data:
-    14.2 avg chars/msg, 44.4% under 10 chars
-    97% no ending punctuation, 18.2% emoji usage
-    29.3% Chinese-English code-switching
-&num;8  Chat Examples &mdash; 20 algorithmically selected real conversations
-&num;9  Mode Switching &mdash; Casual mode (default, 5-20 chars) vs Knowledge mode (longer, technical depth)
-&num;10 Instruction Suffix &mdash; Appended to every user message: "reply as Ning, split into short messages"</div>
-      </div>
-    </div>
-
-    <div class="code-block rv">
-<span class="comment">// Style rules are generated from statistical analysis, not handwritten</span>
-<span class="keyword">const</span> styleRules = {
-  <span class="fn">avgLength</span>:     <span class="string">14.2</span>,    <span class="comment">// chars per message</span>
-  <span class="fn">shortMsgPct</span>:   <span class="string">44.4</span>,    <span class="comment">// % messages under 10 chars</span>
-  <span class="fn">noPunctuation</span>: <span class="string">97.0</span>,    <span class="comment">// % messages with no ending punctuation</span>
-  <span class="fn">emojiUsage</span>:    <span class="string">18.2</span>,    <span class="comment">// % messages containing emoji</span>
-  <span class="fn">mixedLangPct</span>:  <span class="string">29.3</span>,    <span class="comment">// % messages mixing Chinese + English</span>
-  <span class="fn">topFillers</span>:    [<span class="string">"haha"</span>, <span class="string">"hmm"</span>, <span class="string">"kk"</span>, <span class="string">"nice"</span>],
-  <span class="fn">topEmojis</span>:     [<span class="string">"&#128514;"</span>, <span class="string">"&#128557;"</span>, <span class="string">"&#129326;"</span>, <span class="string">"&#128580;"</span>, <span class="string">"&#128527;"</span>, <span class="string">"&#128077;"</span>],
-};
-
-<span class="comment">// Generation config enforces brevity</span>
-<span class="keyword">const</span> config = { <span class="fn">maxOutputTokens</span>: <span class="string">128</span>, <span class="fn">temperature</span>: <span class="string">0.8</span> };
     </div>
   </div>
 </section>
@@ -1088,132 +995,30 @@ section.content-sec {
 </section>
 </div>
 
-<div class="snap-page snap-scroll">
+<div class="snap-page">
 <!-- RAG Analysis -->
 <section class="content-sec" id="rag">
   <div class="container">
     <div class="sec-label rv">RAG Analysis</div>
     <h2 class="sec-title rv">Would RAG <em>help</em>?</h2>
     <p class="sec-desc rv">
-      The Python prototype includes a full RAG pipeline. Here's how it works
-      and whether it's worth the added complexity for production.
+      The Python prototype includes a full RAG pipeline &mdash; but is it worth the complexity?
     </p>
 
-    <div class="expandable rv">
-      <div class="expand-header" onclick="toggleExpand(this)">
-        <h4>How the RAG pipeline works</h4>
-        <span class="expand-toggle">&#9654;</span>
-      </div>
-      <div class="expand-body">
-        <div class="expand-content"><b>Indexing phase</b>
-Each (context, response) pair is converted to flat text and embedded
-using Gemini's embedding model (768-dim vectors). Stored as a NumPy
-.npz file with normalized vectors for fast cosine similarity.
-
-Quality filters applied: min 4 chars, deduplicated responses,
-max 5000 pairs per conversation partner (uniform sampling if more).
-
-<b>Retrieval phase</b>
-When a user sends a message, it's embedded with the same model.
-Cosine similarity is computed against all stored vectors.
-Top-5 most similar past conversations are returned and injected
-into the prompt as "here's how Ning responded in similar situations."
-
-<b>Key insight</b>
-The RAG doesn't retrieve facts &mdash; it retrieves <i>style examples</i>.
-It answers: "When someone asked something similar, how did Ning reply?"</div>
-      </div>
-    </div>
-
-    <table class="compare-table rv">
-      <thead>
-        <tr>
-          <th></th>
-          <th>Current (Prompt-only)</th>
-          <th>With RAG</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><b>Latency</b></td>
-          <td class="hl">~800ms total</td>
-          <td>+300-500ms for embedding + similarity search</td>
-        </tr>
-        <tr>
-          <td><b>Cost</b></td>
-          <td class="hl">1 API call per message</td>
-          <td>2 API calls (embedding + generation)</td>
-        </tr>
-        <tr>
-          <td><b>Infrastructure</b></td>
-          <td class="hl">Stateless serverless function</td>
-          <td>Needs vector store (in-memory or external DB)</td>
-        </tr>
-        <tr>
-          <td><b>Style accuracy</b></td>
-          <td>Statistical rules + 20 fixed examples</td>
-          <td class="hl">Dynamic examples matched to input context</td>
-        </tr>
-        <tr>
-          <td><b>Edge cases</b></td>
-          <td>Falls back to general LLM behavior</td>
-          <td class="hl">Can surface rare but relevant past responses</td>
-        </tr>
-        <tr>
-          <td><b>Cold start</b></td>
-          <td class="hl">Zero &mdash; prompt is static</td>
-          <td>Must load vector index (~5K embeddings)</td>
-        </tr>
-        <tr>
-          <td><b>Maintenance</b></td>
-          <td class="hl">Edit one text file</td>
-          <td>Rebuild embeddings when chat data updates</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <div class="features-grid stagger" style="margin-top:2rem;">
+    <div class="features-grid stagger">
       <div class="feat-card rv">
         <h3>&#9989; When RAG helps</h3>
-        <p><b>Niche topics.</b> If someone asks about a specific shared memory ("remember that restaurant?"), RAG can surface the actual past conversation. The static prompt can't. Also improves consistency for rare catchphrases and topic-specific vocabulary.</p>
+        <p><b>Niche topics.</b> Surfacing specific shared memories or rare catchphrases that the static prompt can't cover.</p>
       </div>
       <div class="feat-card rv">
         <h3>&#10060; When RAG is overkill</h3>
-        <p><b>Casual chat.</b> For "what's up" / "how are you" type exchanges, the statistical style rules already produce natural responses. RAG adds latency and cost without meaningful quality improvement for common conversation patterns.</p>
+        <p><b>Casual chat.</b> Statistical style rules already handle common patterns. RAG adds latency without meaningful improvement.</p>
       </div>
     </div>
 
-    <div class="expandable rv" style="margin-top:1.5rem;">
-      <div class="expand-header" onclick="toggleExpand(this)">
-        <h4>Verdict: Prompt-only is the right call (for now)</h4>
-        <span class="expand-toggle">&#9654;</span>
-      </div>
-      <div class="expand-body">
-        <div class="expand-content">The current approach prioritizes simplicity and speed:
-
-<b>1. Latency matters most for chat UX.</b>
-Every 100ms of delay makes the bot feel less human. The prompt-only
-approach is a single API call with zero preprocessing.
-
-<b>2. The "style memory" problem is already solved.</b>
-Statistical analysis + curated examples capture 90%+ of the persona.
-RAG's marginal improvement is in the long tail of rare interactions.
-
-<b>3. Serverless architecture stays clean.</b>
-No vector store to host, no embeddings to rebuild, no cold start
-penalty. The entire backend is a single stateless function.
-
-<b>4. The review system is the real feedback loop.</b>
-Instead of RAG, quality improves through: rate conversations &rarr;
-identify failure patterns &rarr; update prompt rules &rarr; redeploy.
-This human-in-the-loop approach is more targeted than retrieval.
-
-<b>When to reconsider:</b>
-If the bot needs to reference specific shared memories ("that trip
-we took"), recall factual details from past conversations, or
-handle 10+ conversation partners with distinct relationship dynamics.</div>
-      </div>
-    </div>
+    <p class="rv" style="font-size:0.75rem; color:var(--text-2); margin-top:1.5rem; line-height:1.8;">
+      <b style="color:var(--olive);">Verdict:</b> Prompt-only wins for now. Single API call (~800ms), zero infrastructure, edit one file to improve. RAG reserved for when the bot needs factual recall across conversation partners.
+    </p>
   </div>
 </section>
 
