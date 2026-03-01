@@ -719,6 +719,13 @@ section.content-sec {
 .stagger .rv:nth-child(5) { transition-delay: 0.32s; }
 .stagger .rv:nth-child(6) { transition-delay: 0.40s; }
 
+/* ── Language Toggle ── */
+.lang-toggle { position: fixed; top: 2rem; right: 2rem; font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.08em; padding: 0.4rem 1rem; border: 1px solid var(--line); border-radius: 100px; background: var(--card); color: var(--text-2); cursor: pointer; transition: all 0.3s; z-index: 50; }
+.lang-toggle:hover { border-color: var(--olive); color: var(--olive); }
+.zh { display: none; }
+html.lang-zh .en { display: none; }
+html.lang-zh .zh { display: revert; }
+
 /* ── Responsive ── */
 @media (max-width: 700px) {
   .container { padding: 0 1.2rem; }
@@ -732,40 +739,50 @@ section.content-sec {
   .site-footer { flex-direction: column; gap: 0.5rem; }
   .compare-table { font-size: 0.65rem; }
   .compare-table th, .compare-table td { padding: 0.6rem; }
+  .lang-toggle { top: 1rem; right: 1rem; }
 }
 </style>
 </head>
 <body>
+<button class="lang-toggle" id="langToggle">中文</button>
 
 <!-- Hero -->
 <section class="hero" style="position:relative;">
   <div class="hero-inner">
-    <div class="hero-badge">Technical Showcase</div>
-    <h1>An AI that <em>talks</em> like a real person</h1>
-    <p class="hero-desc">
+    <div class="hero-badge"><span class="en">Technical Showcase</span><span class="zh">技术展示</span></div>
+    <h1 class="en">An AI that <em>talks</em> like a real person</h1>
+    <h1 class="zh">一个说话像真人的 <em>AI</em></h1>
+    <p class="hero-desc en">
       Aime is a chatbot that replicates a real person's texting style &mdash;
       not by fine-tuning, but by statistically analyzing thousands of
       real chat messages and encoding the patterns into a system prompt.
     </p>
+    <p class="hero-desc zh">
+      Aime 是一个复刻真人聊天风格的聊天机器人——不靠微调，而是通过统计分析数千条真实聊天记录，将模式编码进 system prompt。
+    </p>
     <div class="hero-links">
-      <a href="https://aime.ning.codes" target="_blank">Try Aime &rarr;</a>
-      <a href="#pipeline">Training Pipeline</a>
-      <a href="#architecture">Runtime Architecture</a>
-      <a href="#rag">RAG Analysis</a>
+      <a href="https://aime.ning.codes" target="_blank"><span class="en">Try Aime &rarr;</span><span class="zh">体验 Aime &rarr;</span></a>
+      <a href="#pipeline"><span class="en">Training Pipeline</span><span class="zh">训练流程</span></a>
+      <a href="#architecture"><span class="en">Runtime Architecture</span><span class="zh">运行时架构</span></a>
+      <a href="#rag"><span class="en">RAG Analysis</span><span class="zh">RAG 分析</span></a>
     </div>
   </div>
-  <div class="scroll-hint">scroll to explore</div>
+  <div class="scroll-hint"><span class="en">scroll to explore</span><span class="zh">下滑探索</span></div>
 </section>
 
 <div class="snap-page">
 <!-- Chat Demo -->
 <section class="content-sec">
   <div class="container">
-    <div class="sec-label rv">Live Preview</div>
-    <h2 class="sec-title rv">Feels like <em>texting</em> a friend</h2>
-    <p class="sec-desc rv">
+    <div class="sec-label rv"><span class="en">Live Preview</span><span class="zh">实时预览</span></div>
+    <h2 class="sec-title rv en">Feels like <em>texting</em> a friend</h2>
+    <h2 class="sec-title rv zh">像在和<em>朋友</em>聊天</h2>
+    <p class="sec-desc rv en">
       Multi-bubble replies arrive with natural typing delays
       proportional to message length, simulating real human texting rhythm.
+    </p>
+    <p class="sec-desc rv zh">
+      多条消息气泡以与消息长度成正比的打字延迟逐条到达，模拟真实的聊天节奏。
     </p>
 
     <div class="chat-demo rv" id="chatDemo">
@@ -793,52 +810,66 @@ section.content-sec {
 <!-- Training Pipeline -->
 <section class="content-sec" id="pipeline">
   <div class="container">
-    <div class="sec-label rv">Training Pipeline</div>
-    <h2 class="sec-title rv">From chat exports to <em>persona</em></h2>
-    <p class="sec-desc rv">
+    <div class="sec-label rv"><span class="en">Training Pipeline</span><span class="zh">训练流程</span></div>
+    <h2 class="sec-title rv en">From chat exports to <em>persona</em></h2>
+    <h2 class="sec-title rv zh">从聊天记录到<em>人格</em></h2>
+    <p class="sec-desc rv en">
       No model training required. Instead, we extract statistical
       patterns from real WeChat conversations and encode them
       directly into a structured system prompt.
+    </p>
+    <p class="sec-desc rv zh">
+      无需模型训练。我们从真实微信对话中提取统计模式，直接编码进结构化的 system prompt。
     </p>
 
     <div class="pipeline rv">
       <div class="pipe-step">
         <div class="pipe-dot">1</div>
         <div class="pipe-content">
-          <h4>Export &amp; Parse WeChat History</h4>
-          <p>Parse raw HTML exports with BeautifulSoup. Merge consecutive messages, convert emoji tags, filter media.</p>
+          <h4 class="en">Export &amp; Parse WeChat History</h4>
+          <h4 class="zh">导出并解析微信聊天记录</h4>
+          <p class="en">Parse raw HTML exports with BeautifulSoup. Merge consecutive messages, convert emoji tags, filter media.</p>
+          <p class="zh">用 BeautifulSoup 解析原始 HTML 导出文件。合并连续消息，转换 emoji 标签，过滤媒体消息。</p>
         </div>
       </div>
 
       <div class="pipe-step">
         <div class="pipe-dot">2</div>
         <div class="pipe-content">
-          <h4>Build Conversation Pairs</h4>
-          <p>Extract (context, response) pairs as JSONL &mdash; up to 5 context messages per response.</p>
+          <h4 class="en">Build Conversation Pairs</h4>
+          <h4 class="zh">构建对话对</h4>
+          <p class="en">Extract (context, response) pairs as JSONL &mdash; up to 5 context messages per response.</p>
+          <p class="zh">提取 (上下文, 回复) 对，以 JSONL 格式存储——每条回复最多配 5 条上下文消息。</p>
         </div>
       </div>
 
       <div class="pipe-step">
         <div class="pipe-dot">3</div>
         <div class="pipe-content">
-          <h4>Statistical Style Analysis</h4>
-          <p>Quantify 7 dimensions: message length, punctuation, filler words, emoji usage, multiline tendency, language mix, and overall style summary.</p>
+          <h4 class="en">Statistical Style Analysis</h4>
+          <h4 class="zh">统计风格分析</h4>
+          <p class="en">Quantify 7 dimensions: message length, punctuation, filler words, emoji usage, multiline tendency, language mix, and overall style summary.</p>
+          <p class="zh">量化 7 个维度：消息长度、标点习惯、口头禅、emoji 使用、换行倾向、中英混杂度和整体风格总结。</p>
         </div>
       </div>
 
       <div class="pipe-step">
         <div class="pipe-dot">4</div>
         <div class="pipe-content">
-          <h4>Select Representative Examples</h4>
-          <p>Algorithmically pick 20 diverse examples: 1/3 catchphrases, 1/3 length-balanced, 1/3 random.</p>
+          <h4 class="en">Select Representative Examples</h4>
+          <h4 class="zh">挑选代表性对话</h4>
+          <p class="en">Algorithmically pick 20 diverse examples: 1/3 catchphrases, 1/3 length-balanced, 1/3 random.</p>
+          <p class="zh">算法选取 20 条多样化示例：1/3 口头禅对话、1/3 长度均衡、1/3 随机采样。</p>
         </div>
       </div>
 
       <div class="pipe-step">
         <div class="pipe-dot">5</div>
         <div class="pipe-content">
-          <h4>Assemble System Prompt</h4>
-          <p>Merge QA profile + style rules + examples + guardrails into a ~4000-char structured prompt. No weights modified.</p>
+          <h4 class="en">Assemble System Prompt</h4>
+          <h4 class="zh">组装 System Prompt</h4>
+          <p class="en">Merge QA profile + style rules + examples + guardrails into a ~4000-char structured prompt. No weights modified.</p>
+          <p class="zh">合并 QA 问卷 + 风格规则 + 对话示例 + 安全边界，生成约 4000 字的结构化 prompt。无需修改任何模型权重。</p>
         </div>
       </div>
     </div>
@@ -850,19 +881,24 @@ section.content-sec {
 <!-- Runtime Architecture -->
 <section class="content-sec" id="architecture">
   <div class="container">
-    <div class="sec-label rv">Runtime Architecture</div>
-    <h2 class="sec-title rv">How a message <em>flows</em></h2>
-    <p class="sec-desc rv">
+    <div class="sec-label rv"><span class="en">Runtime Architecture</span><span class="zh">运行时架构</span></div>
+    <h2 class="sec-title rv en">How a message <em>flows</em></h2>
+    <h2 class="sec-title rv zh">一条消息的<em>流转</em>之旅</h2>
+    <p class="sec-desc rv en">
       From the moment you hit send to the typing dots disappearing &mdash;
       every message travels through this serverless pipeline.
+    </p>
+    <p class="sec-desc rv zh">
+      从你按下发送到打字指示器消失——每条消息都经过这个 serverless 管道。
     </p>
 
     <div class="flow rv">
       <div class="flow-step">
         <div class="flow-node">
           <div class="icon">&#128172;</div>
-          <h4>User Input</h4>
-          <p>React frontend captures message + session context</p>
+          <h4><span class="en">User Input</span><span class="zh">用户输入</span></h4>
+          <p class="en">React frontend captures message + session context</p>
+          <p class="zh">React 前端捕获消息和会话上下文</p>
         </div>
       </div>
       <div class="flow-arrow">&rarr;</div>
@@ -870,7 +906,8 @@ section.content-sec {
         <div class="flow-node">
           <div class="icon">&#9889;</div>
           <h4>Vercel Function</h4>
-          <p>Builds prompt with sliding context window (last 20 turns)</p>
+          <p class="en">Builds prompt with sliding context window (last 20 turns)</p>
+          <p class="zh">用滑动上下文窗口（最近 20 轮）构建 prompt</p>
         </div>
       </div>
       <div class="flow-arrow">&rarr;</div>
@@ -878,7 +915,8 @@ section.content-sec {
         <div class="flow-node">
           <div class="icon">&#129504;</div>
           <h4>Gemini 2.0 Flash</h4>
-          <p>Generates reply with persona system prompt + conversation history</p>
+          <p class="en">Generates reply with persona system prompt + conversation history</p>
+          <p class="zh">基于人格 system prompt 和对话历史生成回复</p>
         </div>
       </div>
       <div class="flow-arrow">&rarr;</div>
@@ -886,15 +924,17 @@ section.content-sec {
         <div class="flow-node">
           <div class="icon">&#128466;</div>
           <h4>Upstash Redis</h4>
-          <p>Logs conversation for review &amp; rating (90-day TTL)</p>
+          <p class="en">Logs conversation for review &amp; rating (90-day TTL)</p>
+          <p class="zh">记录对话用于审查和评分（90 天 TTL）</p>
         </div>
       </div>
       <div class="flow-arrow">&rarr;</div>
       <div class="flow-step">
         <div class="flow-node">
           <div class="icon">&#128241;</div>
-          <h4>Chat UI</h4>
-          <p>Multi-bubble display with staggered typing delays</p>
+          <h4><span class="en">Chat UI</span><span class="zh">聊天界面</span></h4>
+          <p class="en">Multi-bubble display with staggered typing delays</p>
+          <p class="zh">多气泡展示，配合交错的打字延迟</p>
         </div>
       </div>
     </div>
@@ -906,48 +946,58 @@ section.content-sec {
 <!-- Tech Stack -->
 <section class="content-sec" id="stack">
   <div class="container">
-    <div class="sec-label rv">Tech Stack</div>
-    <h2 class="sec-title rv">Built with <em>modern</em> tools</h2>
-    <p class="sec-desc rv">
+    <div class="sec-label rv"><span class="en">Tech Stack</span><span class="zh">技术栈</span></div>
+    <h2 class="sec-title rv en">Built with <em>modern</em> tools</h2>
+    <h2 class="sec-title rv zh">用<em>现代</em>工具构建</h2>
+    <p class="sec-desc rv en">
       Minimal dependencies, maximum capability.
       Each piece chosen for simplicity and performance.
+    </p>
+    <p class="sec-desc rv zh">
+      极简依赖，最大能力。每个组件都为简洁和性能而选。
     </p>
 
     <div class="stack-grid stagger">
       <div class="stack-card rv">
         <div class="stack-icon">&#9883;&#65039;</div>
         <h3>React 19 + TypeScript</h3>
-        <p>Latest React with full type safety. Vite-powered dev with instant HMR.</p>
+        <p class="en">Latest React with full type safety. Vite-powered dev with instant HMR.</p>
+        <p class="zh">最新 React，完整类型安全。Vite 驱动开发，即时 HMR。</p>
         <span class="stack-tag">Frontend</span>
       </div>
       <div class="stack-card rv">
         <div class="stack-icon">&#129302;</div>
         <h3>Gemini 2.0 Flash</h3>
-        <p>Google's fast multimodal model. Low latency for chat-like response times.</p>
+        <p class="en">Google's fast multimodal model. Low latency for chat-like response times.</p>
+        <p class="zh">Google 快速多模态模型。低延迟，适合聊天级响应速度。</p>
         <span class="stack-tag">AI / LLM</span>
       </div>
       <div class="stack-card rv">
         <div class="stack-icon">&#128308;</div>
         <h3>Upstash Redis</h3>
-        <p>Serverless Redis for conversation logging. Per-request pricing, zero cold starts.</p>
+        <p class="en">Serverless Redis for conversation logging. Per-request pricing, zero cold starts.</p>
+        <p class="zh">Serverless Redis 用于对话日志。按请求计费，零冷启动。</p>
         <span class="stack-tag">Database</span>
       </div>
       <div class="stack-card rv">
         <div class="stack-icon">&#9650;</div>
         <h3>Vercel Functions</h3>
-        <p>Serverless API endpoints. Auto-scaling, edge-optimized, zero config deployment.</p>
+        <p class="en">Serverless API endpoints. Auto-scaling, edge-optimized, zero config deployment.</p>
+        <p class="zh">Serverless API 端点。自动扩缩容，边缘优化，零配置部署。</p>
         <span class="stack-tag">Backend</span>
       </div>
       <div class="stack-card rv">
         <div class="stack-icon">&#128230;</div>
         <h3>Vite 7</h3>
-        <p>Lightning-fast build tool. ESM-native, sub-second cold starts in dev.</p>
+        <p class="en">Lightning-fast build tool. ESM-native, sub-second cold starts in dev.</p>
+        <p class="zh">极速构建工具。原生 ESM，开发环境亚秒级冷启动。</p>
         <span class="stack-tag">Build</span>
       </div>
       <div class="stack-card rv">
         <div class="stack-icon">&#128269;</div>
         <h3>Review System</h3>
-        <p>Built-in conversation review page for rating quality by session. Export to JSON for iterative prompt tuning.</p>
+        <p class="en">Built-in conversation review page for rating quality by session. Export to JSON for iterative prompt tuning.</p>
+        <p class="zh">内置对话审查页面，按会话评分质量。导出 JSON 用于迭代优化 prompt。</p>
         <span class="stack-tag">Tooling</span>
       </div>
     </div>
@@ -959,36 +1009,46 @@ section.content-sec {
 <!-- Key Features -->
 <section class="content-sec">
   <div class="container">
-    <div class="sec-label rv">Key Features</div>
-    <h2 class="sec-title rv">What makes it <em>work</em></h2>
-    <p class="sec-desc rv">
+    <div class="sec-label rv"><span class="en">Key Features</span><span class="zh">核心特性</span></div>
+    <h2 class="sec-title rv en">What makes it <em>work</em></h2>
+    <h2 class="sec-title rv zh">是什么让它<em>有效</em></h2>
+    <p class="sec-desc rv en">
       The details that make an AI chatbot feel like a real person texting you back.
+    </p>
+    <p class="sec-desc rv zh">
+      这些细节让 AI 聊天机器人的回复像真人在发消息。
     </p>
 
     <div class="features-grid stagger">
       <div class="feat-card rv">
-        <h3>&#127917; Data-Driven Persona</h3>
-        <p>Instead of handwriting style rules, every number in the prompt (14.2 avg chars, 97% no punctuation, 18.2% emoji) comes from statistical analysis of real chat data.</p>
+        <h3>&#127917; <span class="en">Data-Driven Persona</span><span class="zh">数据驱动的人格</span></h3>
+        <p class="en">Instead of handwriting style rules, every number in the prompt (14.2 avg chars, 97% no punctuation, 18.2% emoji) comes from statistical analysis of real chat data.</p>
+        <p class="zh">不靠手写风格规则，prompt 中的每个数字（14.2 平均字符、97% 无标点、18.2% emoji）都来自真实聊天数据的统计分析。</p>
       </div>
       <div class="feat-card rv">
-        <h3>&#128172; Multi-Bubble Replies</h3>
-        <p>Responses split into 1-3 short messages with <code>staggered typing delays</code> proportional to message length. Mimics real texting rhythm instead of a single wall of text.</p>
+        <h3>&#128172; <span class="en">Multi-Bubble Replies</span><span class="zh">多消息气泡回复</span></h3>
+        <p class="en">Responses split into 1-3 short messages with <code>staggered typing delays</code> proportional to message length. Mimics real texting rhythm instead of a single wall of text.</p>
+        <p class="zh">回复拆分为 1-3 条短消息，配合与消息长度成正比的<code>交错打字延迟</code>。模拟真实聊天节奏，而非一整段文字。</p>
       </div>
       <div class="feat-card rv">
-        <h3>&#129504; Context Window</h3>
-        <p>Sliding window of last 20 messages sent to the model. Older messages referenced via a system note to maintain conversational continuity without hitting token limits.</p>
+        <h3>&#129504; <span class="en">Context Window</span><span class="zh">上下文窗口</span></h3>
+        <p class="en">Sliding window of last 20 messages sent to the model. Older messages referenced via a system note to maintain conversational continuity without hitting token limits.</p>
+        <p class="zh">最近 20 条消息的滑动窗口发送给模型。更早的消息通过系统备注引用，在不超 token 限制的前提下保持对话连贯性。</p>
       </div>
       <div class="feat-card rv">
-        <h3>&#128202; Conversation Review</h3>
-        <p>Standalone review page for rating conversations by session. Filter by quality, export JSON. Creates a feedback loop for iteratively improving the system prompt.</p>
+        <h3>&#128202; <span class="en">Conversation Review</span><span class="zh">对话审查</span></h3>
+        <p class="en">Standalone review page for rating conversations by session. Filter by quality, export JSON. Creates a feedback loop for iteratively improving the system prompt.</p>
+        <p class="zh">独立的审查页面，按会话评分对话质量。按质量筛选，导出 JSON。形成反馈闭环，持续迭代优化 system prompt。</p>
       </div>
       <div class="feat-card rv">
-        <h3>&#128274; Safety Boundaries</h3>
-        <p>Strict rules against leaking personal info (address, phone, ID), company internals, or fabricating facts. Graceful deflection with humor when pushed.</p>
+        <h3>&#128274; <span class="en">Safety Boundaries</span><span class="zh">安全边界</span></h3>
+        <p class="en">Strict rules against leaking personal info (address, phone, ID), company internals, or fabricating facts. Graceful deflection with humor when pushed.</p>
+        <p class="zh">严格禁止泄露个人信息（地址、电话、身份证）、公司内部信息或编造事实。被追问时以幽默方式优雅回避。</p>
       </div>
       <div class="feat-card rv">
-        <h3>&#127919; Dual Mode</h3>
-        <p>Casual mode (default): short, playful, 5-20 chars. Knowledge mode: triggered by tech questions, allows longer answers with the same personality voice.</p>
+        <h3>&#127919; <span class="en">Dual Mode</span><span class="zh">双模式</span></h3>
+        <p class="en">Casual mode (default): short, playful, 5-20 chars. Knowledge mode: triggered by tech questions, allows longer answers with the same personality voice.</p>
+        <p class="zh">闲聊模式（默认）：简短、俏皮、5-20 字。知识模式：由技术问题触发，允许更长回答但保持同样的个性语气。</p>
       </div>
     </div>
   </div>
@@ -999,25 +1059,34 @@ section.content-sec {
 <!-- RAG Analysis -->
 <section class="content-sec" id="rag">
   <div class="container">
-    <div class="sec-label rv">RAG Analysis</div>
-    <h2 class="sec-title rv">Would RAG <em>help</em>?</h2>
-    <p class="sec-desc rv">
+    <div class="sec-label rv"><span class="en">RAG Analysis</span><span class="zh">RAG 分析</span></div>
+    <h2 class="sec-title rv en">Would RAG <em>help</em>?</h2>
+    <h2 class="sec-title rv zh">RAG <em>有用</em>吗？</h2>
+    <p class="sec-desc rv en">
       The Python prototype includes a full RAG pipeline &mdash; but is it worth the complexity?
+    </p>
+    <p class="sec-desc rv zh">
+      Python 原型包含完整的 RAG 管道——但值得增加这个复杂度吗？
     </p>
 
     <div class="features-grid stagger">
       <div class="feat-card rv">
-        <h3>&#9989; When RAG helps</h3>
-        <p><b>Niche topics.</b> Surfacing specific shared memories or rare catchphrases that the static prompt can't cover.</p>
+        <h3>&#9989; <span class="en">When RAG helps</span><span class="zh">RAG 有帮助的场景</span></h3>
+        <p class="en"><b>Niche topics.</b> Surfacing specific shared memories or rare catchphrases that the static prompt can't cover.</p>
+        <p class="zh"><b>小众话题。</b>挖掘静态 prompt 无法覆盖的特定共同记忆或罕见口头禅。</p>
       </div>
       <div class="feat-card rv">
-        <h3>&#10060; When RAG is overkill</h3>
-        <p><b>Casual chat.</b> Statistical style rules already handle common patterns. RAG adds latency without meaningful improvement.</p>
+        <h3>&#10060; <span class="en">When RAG is overkill</span><span class="zh">RAG 过度工程的场景</span></h3>
+        <p class="en"><b>Casual chat.</b> Statistical style rules already handle common patterns. RAG adds latency without meaningful improvement.</p>
+        <p class="zh"><b>日常闲聊。</b>统计风格规则已能处理常见模式。RAG 增加延迟却无明显提升。</p>
       </div>
     </div>
 
-    <p class="rv" style="font-size:0.75rem; color:var(--text-2); margin-top:1.5rem; line-height:1.8;">
+    <p class="rv en" style="font-size:0.75rem; color:var(--text-2); margin-top:1.5rem; line-height:1.8;">
       <b style="color:var(--olive);">Verdict:</b> Prompt-only wins for now. Single API call (~800ms), zero infrastructure, edit one file to improve. RAG reserved for when the bot needs factual recall across conversation partners.
+    </p>
+    <p class="rv zh" style="font-size:0.75rem; color:var(--text-2); margin-top:1.5rem; line-height:1.8;">
+      <b style="color:var(--olive);">结论：</b>目前 Prompt-only 方案胜出。单次 API 调用约 800ms，零基础设施，改一个文件就能迭代。RAG 留作后备——等到机器人需要跨对话伙伴的事实回忆能力时再启用。
     </p>
   </div>
 </section>
@@ -1027,7 +1096,8 @@ section.content-sec {
   <footer class="site-footer">
     <div class="made">
       <span class="heart"></span>
-      <span>Built by Ning with vibe coding</span>
+      <span class="en">Built by Ning with vibe coding</span>
+      <span class="zh">Ning 用 vibe coding 打造</span>
     </div>
     <span>ning.codes / 2025</span>
   </footer>
@@ -1085,6 +1155,13 @@ const demoObs = new IntersectionObserver((entries) => {
 
 const chatDemo = document.getElementById('chatDemo');
 if (chatDemo) demoObs.observe(chatDemo);
+
+// Language toggle
+const langToggle = document.getElementById('langToggle');
+langToggle.addEventListener('click', () => {
+  document.documentElement.classList.toggle('lang-zh');
+  langToggle.textContent = document.documentElement.classList.contains('lang-zh') ? 'EN' : '中文';
+});
 </script>
 
 </body>
