@@ -515,24 +515,73 @@ section.content-sec {
   white-space: pre-wrap;
 }
 
+/* ── Phone Frame ── */
+.phone-frame {
+  max-width: 375px;
+  margin: 1.5rem auto;
+  background: #000;
+  border-radius: 44px;
+  padding: 12px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2), 0 0 0 1px rgba(255,255,255,0.1) inset;
+  position: relative;
+}
+
+.phone-notch {
+  width: 120px;
+  height: 28px;
+  background: #000;
+  border-radius: 0 0 18px 18px;
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.phone-screen {
+  border-radius: 34px;
+  overflow: hidden;
+  background: #fff;
+}
+
 /* ── Chat Demo ── */
 .chat-demo {
-  max-width: 380px;
-  margin: 2rem auto;
   background: #fff;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 8px 40px rgba(46,43,38,0.1);
-  border: 1px solid var(--line);
+}
+
+.demo-statusbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 24px 0;
+  font-family: -apple-system, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #000;
+  background: #fff;
+}
+
+.demo-statusbar-icons {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 400;
 }
 
 .demo-header {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 12px 14px;
+  padding: 8px 14px 10px;
   border-bottom: 1px solid #efefef;
   background: #fff;
+}
+
+.demo-back {
+  font-size: 20px;
+  color: #007aff;
+  margin-right: 2px;
 }
 
 .demo-avatar {
@@ -559,6 +608,43 @@ section.content-sec {
 .demo-status {
   font-size: 11px;
   color: #8e8e8e;
+}
+
+.demo-input-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-top: 1px solid #efefef;
+  background: #fff;
+}
+
+.demo-input-fake {
+  flex: 1;
+  height: 34px;
+  border-radius: 17px;
+  border: 1px solid #ddd;
+  background: #fafafa;
+}
+
+.demo-send-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #007aff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 14px;
+}
+
+.demo-home-indicator {
+  width: 134px;
+  height: 5px;
+  background: #000;
+  border-radius: 3px;
+  margin: 6px auto 4px;
 }
 
 .demo-messages {
@@ -739,6 +825,10 @@ html.lang-zh .zh { display: revert; }
   .compare-table { font-size: 0.65rem; }
   .compare-table th, .compare-table td { padding: 0.6rem; }
   .lang-toggle { top: 1rem; right: 1rem; }
+  .phone-frame { max-width: 320px; border-radius: 36px; padding: 10px; }
+  .phone-notch { width: 100px; height: 24px; top: 10px; }
+  .phone-screen { border-radius: 28px; }
+  .demo-messages { height: 360px; }
 }
 </style>
 </head>
@@ -784,15 +874,26 @@ html.lang-zh .zh { display: revert; }
       多条消息气泡以与消息长度成正比的打字延迟逐条到达，模拟真实的聊天节奏。
     </p>
 
-    <div class="chat-demo rv" id="chatDemo">
-      <div class="demo-header">
-        <div class="demo-avatar">N</div>
-        <div>
-          <div class="demo-name">Ning</div>
-          <div class="demo-status">Active now</div>
+    <div class="phone-frame rv" id="chatDemo">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+      <div class="chat-demo">
+        <div class="demo-statusbar">
+          <span>9:41</span>
+          <div class="demo-statusbar-icons">
+            <span>&#9679;&#9679;&#9679;&#9679;&#9675;</span>
+            <span>&#128267;</span>
+          </div>
         </div>
-      </div>
-      <div class="demo-messages" id="demoMessages">
+        <div class="demo-header">
+          <div class="demo-back">&#8249;</div>
+          <div class="demo-avatar">N</div>
+          <div>
+            <div class="demo-name">Ning</div>
+            <div class="demo-status">Active now</div>
+          </div>
+        </div>
+        <div class="demo-messages" id="demoMessages">
         <div class="demo-msg user" style="animation-delay:0.5s">你是真人吗</div>
         <div class="demo-msg bot" style="animation-delay:1.7s">半真半假吧</div>
         <div class="demo-msg bot" style="animation-delay:2.7s">我是 AI 版的柴宁</div>
@@ -831,6 +932,13 @@ html.lang-zh .zh { display: revert; }
         <div class="demo-msg bot" style="animation-delay:47.5s">把历史对话做成向量数据库 遇到特定话题可以检索真实记忆</div>
         <div class="demo-msg bot" style="animation-delay:48.5s">不过现在日常聊天 纯 prompt 已经够用了 😌</div>
       </div>
+      <div class="demo-input-bar">
+        <div class="demo-input-fake"></div>
+        <div class="demo-send-icon">&#9650;</div>
+      </div>
+      <div class="demo-home-indicator"></div>
+    </div>
+    </div>
     </div>
   </div>
 </section>
