@@ -566,9 +566,14 @@ section.content-sec {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  min-height: 200px;
+  height: 420px;
+  overflow-y: auto;
   background: #fff;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
 }
+
+.demo-messages::-webkit-scrollbar { display: none; }
 
 .demo-msg {
   max-width: 75%;
@@ -594,12 +599,6 @@ section.content-sec {
   color: #262626;
 }
 
-.demo-msg:nth-child(1) { animation-delay: 0.5s; }
-.demo-msg:nth-child(2) { animation-delay: 1.4s; }
-.demo-msg:nth-child(3) { animation-delay: 2.0s; }
-.demo-msg:nth-child(4) { animation-delay: 3.0s; }
-.demo-msg:nth-child(5) { animation-delay: 3.8s; }
-.demo-msg:nth-child(6) { animation-delay: 4.4s; }
 
 @keyframes msgIn {
   to { opacity: 1; transform: translateY(0); }
@@ -794,12 +793,43 @@ html.lang-zh .zh { display: revert; }
         </div>
       </div>
       <div class="demo-messages" id="demoMessages">
-        <div class="demo-msg user">what have you been up to lately</div>
-        <div class="demo-msg bot">been doing vibe coding nonstop</div>
-        <div class="demo-msg bot">built like 5 projects already, kinda addicting</div>
-        <div class="demo-msg user">what's vibe coding</div>
-        <div class="demo-msg bot">you just describe what you want and AI writes the code for you</div>
-        <div class="demo-msg bot">this chat app was built that way actually &#128526;</div>
+        <div class="demo-msg user" style="animation-delay:0.5s">你是真人吗</div>
+        <div class="demo-msg bot" style="animation-delay:1.7s">半真半假吧</div>
+        <div class="demo-msg bot" style="animation-delay:2.7s">我是 AI 版的柴宁</div>
+        <div class="demo-msg user" style="animation-delay:4.7s">所以你是个聊天机器人？</div>
+        <div class="demo-msg bot" style="animation-delay:5.9s">对 但不是那种客服机器人</div>
+        <div class="demo-msg bot" style="animation-delay:6.9s">我是用真实微信聊天记录训练出来的</div>
+        <div class="demo-msg user" style="animation-delay:8.9s">怎么训练的 微调模型吗</div>
+        <div class="demo-msg bot" style="animation-delay:10.1s">没有微调</div>
+        <div class="demo-msg bot" style="animation-delay:11.1s">分析了几千条我的微信消息 提取说话的统计模式</div>
+        <div class="demo-msg bot" style="animation-delay:12.1s">比如平均每条 14 个字 97%不用标点 emoji 很多</div>
+        <div class="demo-msg user" style="animation-delay:14.1s">挺酷的</div>
+        <div class="demo-msg user" style="animation-delay:15.1s">所以全靠 prompt？</div>
+        <div class="demo-msg bot" style="animation-delay:16.3s">对 纯 prompt engineering</div>
+        <div class="demo-msg bot" style="animation-delay:17.3s">风格规则 + 20 条真实对话示例 + 安全边界 全塞进 system prompt</div>
+        <div class="demo-msg bot" style="animation-delay:18.3s">改一个文件就能迭代 不用动模型</div>
+        <div class="demo-msg user" style="animation-delay:20.3s">用的什么模型</div>
+        <div class="demo-msg bot" style="animation-delay:21.5s">Gemini 2.0 Flash</div>
+        <div class="demo-msg bot" style="animation-delay:22.5s">快 便宜 一次调用大概 800ms</div>
+        <div class="demo-msg user" style="animation-delay:25.0s">连续发好几条消息的效果感觉很真实</div>
+        <div class="demo-msg bot" style="animation-delay:26.2s">回复会拆成 1-3 条短消息</div>
+        <div class="demo-msg bot" style="animation-delay:27.2s">每条之间有延迟 跟长度成正比</div>
+        <div class="demo-msg bot" style="animation-delay:28.2s">模拟真人打字的节奏</div>
+        <div class="demo-msg user" style="animation-delay:30.2s">跑在哪</div>
+        <div class="demo-msg bot" style="animation-delay:31.4s">Vercel serverless</div>
+        <div class="demo-msg bot" style="animation-delay:32.4s">对话存 Redis 90 天过期</div>
+        <div class="demo-msg bot" style="animation-delay:33.4s">还有个 review 页面可以给对话打分 优化 prompt</div>
+        <div class="demo-msg user" style="animation-delay:35.9s">那你就是个数字分身了</div>
+        <div class="demo-msg bot" style="animation-delay:37.1s">差不多 但我不会泄露真 Ning 的隐私 😄</div>
+        <div class="demo-msg bot" style="animation-delay:38.1s">问地址电话什么的我会装傻</div>
+        <div class="demo-msg user" style="animation-delay:40.1s">怎么做到的</div>
+        <div class="demo-msg bot" style="animation-delay:41.3s">system prompt 里写了安全边界</div>
+        <div class="demo-msg bot" style="animation-delay:42.3s">地址 电话 身份证 公司内部信息 一律不回答</div>
+        <div class="demo-msg bot" style="animation-delay:43.3s">被追问就用幽默回避 不会硬拒绝</div>
+        <div class="demo-msg user" style="animation-delay:45.3s">以后会更聪明吗</div>
+        <div class="demo-msg bot" style="animation-delay:46.5s">有个 RAG 方案在排期</div>
+        <div class="demo-msg bot" style="animation-delay:47.5s">把历史对话做成向量数据库 遇到特定话题可以检索真实记忆</div>
+        <div class="demo-msg bot" style="animation-delay:48.5s">不过现在日常聊天 纯 prompt 已经够用了 😌</div>
       </div>
     </div>
   </div>
@@ -1139,16 +1169,24 @@ function toggleExpand(header) {
   header.classList.toggle('open');
 }
 
-// Replay chat demo when visible
+// Replay chat demo when visible + auto-scroll
+let demoScrollInterval = null;
 const demoObs = new IntersectionObserver((entries) => {
   entries.forEach(e => {
     if (e.isIntersecting) {
+      const container = document.getElementById('demoMessages');
       const msgs = e.target.querySelectorAll('.demo-msg');
       msgs.forEach(msg => {
         msg.style.animation = 'none';
         msg.offsetHeight;
         msg.style.animation = '';
       });
+      container.scrollTop = 0;
+      if (demoScrollInterval) clearInterval(demoScrollInterval);
+      demoScrollInterval = setInterval(() => {
+        container.scrollTop = container.scrollHeight;
+      }, 300);
+      setTimeout(() => clearInterval(demoScrollInterval), 50000);
     }
   });
 }, { threshold: 0.3 });
