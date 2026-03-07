@@ -185,6 +185,29 @@ body {
   padding: 10px 16px;
   font-size: 15px;
   color: #8e8e8e;
+  min-height: 21px;
+  transition: border-color 0.2s;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.input-wrapper.typing {
+  color: #262626;
+  border-color: #33aeff;
+}
+
+.input-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 16px;
+  background: #33aeff;
+  vertical-align: text-bottom;
+  animation: blink 1s step-end infinite;
+  margin-left: 1px;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
 }
 
 .send-btn {
@@ -192,6 +215,15 @@ body {
   font-size: 15px;
   font-weight: 600;
   padding: 10px 4px;
+  transition: color 0.2s, transform 0.15s;
+}
+
+.send-btn.active {
+  color: #0095f6;
+}
+
+.send-btn.press {
+  transform: scale(0.9);
 }
 
 /* ── Controls ── */
@@ -255,8 +287,8 @@ body {
     </div>
     <div class="messages" id="messages"></div>
     <div class="input-area">
-      <div class="input-wrapper">Message...</div>
-      <div class="send-btn">Send</div>
+      <div class="input-wrapper" id="inputField">Message...</div>
+      <div class="send-btn" id="sendBtn">Send</div>
     </div>
   </div>
 </div>
@@ -292,14 +324,77 @@ const SCRIPT = [
 
 let timeouts = [];
 const container = document.getElementById('messages');
+const inputField = document.getElementById('inputField');
+const sendBtn = document.getElementById('sendBtn');
 
 function clear() {
   timeouts.forEach(t => clearTimeout(t));
   timeouts = [];
   container.innerHTML = '';
+  resetInput();
+}
+
+function resetInput() {
+  inputField.innerHTML = 'Message...';
+  inputField.classList.remove('typing');
+  sendBtn.classList.remove('active', 'press');
 }
 
 function scroll() { container.scrollTop = container.scrollHeight; }
+
+// Type text into input field character by character
+function typeInInput(text, startDelay) {
+  let d = startDelay;
+  const charDelay = 55;
+
+  // Start: clear placeholder, add cursor
+  timeouts.push(setTimeout(() => {
+    inputField.innerHTML = '<span class="input-cursor"></span>';
+    inputField.classList.add('typing');
+  }, d));
+  d += 150;
+
+  // Type each character
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i];
+    timeouts.push(setTimeout(() => {
+      const cursor = inputField.querySelector('.input-cursor');
+      if (cursor) cursor.insertAdjacentText('beforebegin', char);
+    }, d));
+    d += charDelay + Math.random() * 30;
+  }
+
+  // Activate send button
+  timeouts.push(setTimeout(() => {
+    sendBtn.classList.add('active');
+  }, d));
+  d += 200;
+
+  return d;
+}
+
+// Simulate pressing send
+function pressSend(delay) {
+  let d = delay;
+
+  // Press animation
+  timeouts.push(setTimeout(() => {
+    sendBtn.classList.add('press');
+  }, d));
+  d += 100;
+
+  // Release
+  timeouts.push(setTimeout(() => {
+    sendBtn.classList.remove('press');
+  }, d));
+  d += 100;
+
+  // Clear input
+  timeouts.push(setTimeout(resetInput, d));
+  d += 50;
+
+  return d;
+}
 
 function showTyping() {
   const el = document.createElement('div');
@@ -350,14 +445,39 @@ function run() {
   for (const step of SCRIPT) {
     if (step.role === 'user') {
       const msgs = step.msgs;
-      timeouts.push(setTimeout(() => addGroup('user', msgs), delay));
-      delay += 1200 + msgs.join('').length * 40;
+
+      // For each user message: type it in the input, press send, show bubble
+      for (let i = 0; i < msgs.length; i++) {
+        const msg = msgs[i];
+
+        // Type in input field
+        delay = typeInInput(msg, delay);
+
+        // Press send
+        delay = pressSend(delay);
+
+        // Show message bubble
+        const isFirst = i === 0;
+        timeouts.push(setTimeout(() => {
+          if (isFirst) {
+            addGroup('user', [msg]);
+          } else {
+            const lastGroup = container.querySelector('.message-group.user:last-child');
+            if (lastGroup) addBubble(lastGroup, msg);
+          }
+        }, delay));
+        delay += 400;
+      }
+
+      delay += 300;
     } else {
       const msgs = step.msgs;
 
+      // Show typing indicator
       timeouts.push(setTimeout(showTyping, delay));
       delay += 800;
 
+      // First bubble replaces typing
       const firstMsg = msgs[0];
       timeouts.push(setTimeout(() => {
         removeTyping();
@@ -365,6 +485,7 @@ function run() {
       }, delay));
       delay += Math.min(400 + firstMsg.length * 60, 1500);
 
+      // Remaining bubbles append to same group
       for (let i = 1; i < msgs.length; i++) {
         const msg = msgs[i];
         timeouts.push(setTimeout(() => {
