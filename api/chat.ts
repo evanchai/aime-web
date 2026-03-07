@@ -2,6 +2,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { Redis } from "@upstash/redis";
 import { Ratelimit } from "@upstash/ratelimit";
+import { Index } from "@upstash/vector";
 
 const ratelimit = new Ratelimit({
   redis: new Redis({
@@ -11,6 +12,48 @@ const ratelimit = new Ratelimit({
   limiter: Ratelimit.slidingWindow(20, "1 m"),
   prefix: "rl:aime",
 });
+
+function getVectorIndex(): Index | null {
+  const url = process.env.aime_rag_UPSTASH_VECTOR_REST_URL;
+  const token = process.env.aime_rag_UPSTASH_VECTOR_REST_TOKEN;
+  if (!url || !token) return null;
+  return new Index({ url, token });
+}
+
+interface VectorMetadata {
+  response: string;
+  context: string;
+  conversation_with: string;
+  timestamp: string;
+}
+
+async function retrieveMemories(query: string): Promise<string> {
+  const index = getVectorIndex();
+  if (!index) return "";
+
+  try {
+    const results = await index.query<VectorMetadata>({
+      data: query,
+      topK: 5,
+      includeMetadata: true,
+    });
+
+    const memories = results
+      .filter((r) => r.score > 0.7 && r.metadata)
+      .map((r) => {
+        const m = r.metadata!;
+        const ctx = m.context ? `对方: ${m.context}\n` : "";
+        return `${ctx}柴宁: ${m.response}`;
+      });
+
+    if (memories.length === 0) return "";
+
+    return `\n\n## 相关记忆（来自真实聊天记录，可以参考但不要生搬硬套）\n${memories.join("\n---\n")}`;
+  } catch (e) {
+    console.error("Vector search error:", e);
+    return "";
+  }
+}
 
 function getSystemPrompt() {
   const now = new Date();
@@ -229,10 +272,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
+    // RAG: retrieve relevant memories based on user message
+    const memories = await retrieveMemories(message);
+
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({
       model: "gemini-2.0-flash",
-      systemInstruction: getSystemPrompt(),
+      systemInstruction: getSystemPrompt() + memories,
     });
 
     const contents: Array<{ role: string; parts: Array<{ text: string }> }> = [];
