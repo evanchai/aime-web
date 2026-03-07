@@ -21,6 +21,7 @@ function getVectorIndex(): Index | null {
 }
 
 interface VectorMetadata {
+  [key: string]: string;
   response: string;
   context: string;
   conversation_with: string;
