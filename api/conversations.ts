@@ -2,6 +2,13 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { Redis } from "@upstash/redis";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  // Auth check: require Bearer token matching ADMIN_TOKEN
+  const authHeader = req.headers.authorization;
+  const token = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null;
+  if (!process.env.ADMIN_TOKEN || token !== process.env.ADMIN_TOKEN) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
   if (!process.env.KV_REST_API_URL) {
     return res.status(500).json({ error: "Redis not configured" });
   }
