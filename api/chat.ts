@@ -257,9 +257,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   const ip = (req.headers["x-forwarded-for"] as string)?.split(",")[0]?.trim() || "unknown";
-  const { success } = await ratelimit.limit(ip);
-  if (!success) {
-    return res.status(429).json({ error: "Too many requests. Please try again later." });
+  try {
+    const { success } = await ratelimit.limit(ip);
+    if (!success) {
+      return res.status(429).json({ error: "Too many requests. Please try again later." });
+    }
+  } catch (e) {
+    console.error("Rate limit error (skipping):", e);
   }
 
   const apiKey = process.env.GEMINI_API_KEY;
